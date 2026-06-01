@@ -70,10 +70,11 @@ git log --grep='\[<작업번호>\]' --oneline
 
 ▸ 커밋: <N>개 ✓
 ▸ Notion 발행:
-    ✓ 정책서 (notionPageId: ...)
+    ✓ 기획서 검토 (notionPageId: ...)
+    ✓ 정책서
     ✓ 도메인 명세서
     ↷ UI 흐름도 (skipped)
-    ✓ 데이터 흐름도
+    ✓ 데이터 흐름도 · 통신 명세서
     ✓ QA 시나리오
 ▸ 코드 작성 phase:
     ✓ data

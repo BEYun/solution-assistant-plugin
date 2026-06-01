@@ -32,7 +32,38 @@ git log --grep='\[<작업번호>\]' --oneline
 
 미발행 stage 있으면 보고에 ⚠.
 
-## 4. 종결 보고 출력
+## 4. Notion 작업 DB row 종결 처리
+
+검증 통과 후 다음 호출 2회:
+
+1. **작업 상태 → 완료**
+
+   ```
+   yeoboya-publish-notion 호출:
+     task: <progress.task>
+     mode: "state-transition"
+     desiredState: "완료"
+   ```
+
+   publish-notion이 forward-only 판정 후 적용 (이미 "완료"면 no-op).
+
+2. **본인 플랫폼 완료 토글**
+
+   `workspace.platform` 확인 후 본인 플랫폼만 토글:
+
+   ```
+   yeoboya-publish-notion 호출:
+     task: <progress.task>
+     mode: "dispatch"
+     # properties만 갱신하는 sync-update 변형 — markdown 없음
+     properties:
+       iOS_완료: true       # workspace.platform === "iOS"일 때만 포함
+       Android_완료: true   # workspace.platform === "Android"일 때만 포함
+   ```
+
+   두 boolean 모두 본인 플랫폼만 토글한다. 다른 플랫폼의 boolean은 건드리지 않는다 — 다른 플랫폼 작업자가 자기 finish-work에서 자기 boolean을 켤 책임.
+
+## 5. 종결 보고 출력
 
 ```
 [<작업번호>] <작업명> — <workType 한국어 라벨> 종결 보고
@@ -53,12 +84,14 @@ git log --grep='\[<작업번호>\]' --oneline
 작업이 종결되었습니다.
 ```
 
-## 5. progress 업데이트
+## 6. progress 업데이트
 
 `progress.stages.finish-work.status = "done"`.
 
-## 6. Self-validation
+## 7. Self-validation
 
 - [ ] §2 git 검증 결과가 보고에 포함
 - [ ] §3 Notion 발행 상태가 보고에 포함
 - [ ] ⚠ 항목이 있으면 보고에 명시적 표시
+- [ ] publish-notion mode="state-transition" 응답이 성공(or no-op)
+- [ ] workspace.platform이 iOS면 iOS_완료=true 호출, Android면 Android_완료=true 호출

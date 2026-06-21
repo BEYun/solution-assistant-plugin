@@ -1,6 +1,6 @@
 ---
 name: yeoboya-route-work
-description: "Use when the user invokes /yeoboya-route-work, or expresses intent to open the work-list or run an operation ('작업 진행', '작업목록', '다음 작업'). Scans .workflow/ for work items (each has a work.json), lets the user pick one (activeWork marked [현재]), then shows the FULL work-list grouped by phase with no recommendation and triggers the chosen yeoboya-<key> skill via the Skill tool. Includes the write-code warning gate before committing to implementation."
+description: "Use when the user invokes /yeoboya-route-work, or expresses intent to open the work-list or run an operation ('작업 진행', '작업목록', '다음 작업'). Scans .workflow/ for work items (each has a work.json), lets the user pick one (activeWork marked [현재]), then shows the FULL work-list grouped by phase with no recommendation and triggers the chosen yeoboya-<key> skill via the Skill tool. Includes the write-code entry gate (sync-links + required-document check; workType=feature hard-blocks when 정책서/UI 흐름도/데이터 흐름도 are missing) before committing to implementation."
 user-invocable: true
 ---
 
@@ -86,7 +86,7 @@ user-invocable: true
   메뉴(§4)로 복귀. "네/아니요" 게이트 없음.
 - `true`이면 기존 흐름대로 trigger.
 
-이 블록은 write-code 경고 게이트(§6)와 달리 하드 블록이다.
+이 블록(reviewDone 확인)은 workType에 무관하게 항상 하드 블록이다. (write-code 게이트(§6)의 하드 블록은 feature 한정인 것과 구분된다.)
 
 ## 6. write-code 진입 게이트 (대상이 `write-code`일 때만)
 

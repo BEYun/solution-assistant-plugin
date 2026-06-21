@@ -5,8 +5,8 @@ const NOTION_WRITE_TOOLS = new Set([
   'mcp__claude_ai_Notion__notion-update-page',
 ]);
 
-// Single source of truth for title→stage mapping is references/state-schema.md §4.
-const TITLE_TO_STAGE = new Map([
+// Single source of truth for title→work-list-key mapping is references/state-schema.md §4.
+const TITLE_TO_KEY = new Map([
   ['기획서 검토',     'write-policy-feedback'],
   ['정책서',         'write-policy'],
   ['도메인 명세서',   'write-domain'],
@@ -16,34 +16,9 @@ const TITLE_TO_STAGE = new Map([
   ['QA 시나리오',     'write-qa'],
 ]);
 
-const STAGE_TO_TASK_STATE = new Map([
-  ['write-policy-feedback', '기획 단계'],
-  ['write-policy',          '기획 단계'],
-  ['write-domain',          '설계 단계'],
-  ['draw-ui-flow',          '설계 단계'],
-  ['draw-data-flow',        '설계 단계'],
-  ['write-qa',              '테스트 단계'],
-]);
-
-const TASK_STATE_ORDER = [
-  '시작 전', '기획 단계', '설계 단계',
-  '개발 단계', '테스트 단계', '완료',
-];
-
-function stateForStagePublished(stage) {
-  return STAGE_TO_TASK_STATE.get(stage);
-}
-
-function isForwardTransition(currentState, newState) {
-  const a = TASK_STATE_ORDER.indexOf(currentState);
-  const b = TASK_STATE_ORDER.indexOf(newState);
-  if (a < 0 || b < 0) return false;
-  return b > a;
-}
-
-function resolveStage(title) {
+function resolveKey(title) {
   if (typeof title !== 'string') return undefined;
-  return TITLE_TO_STAGE.get(title.trim());
+  return TITLE_TO_KEY.get(title.trim());
 }
 
 function normalizeTitle(raw) {
@@ -96,12 +71,8 @@ function extractPageIds(toolResponse) {
 
 module.exports = {
   NOTION_WRITE_TOOLS,
-  TITLE_TO_STAGE,
-  STAGE_TO_TASK_STATE,
-  TASK_STATE_ORDER,
-  resolveStage,
-  stateForStagePublished,
-  isForwardTransition,
+  TITLE_TO_KEY,
+  resolveKey,
   extractPagesFromInput,
   extractPageIds,
 };

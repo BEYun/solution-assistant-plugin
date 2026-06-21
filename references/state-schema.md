@@ -19,7 +19,7 @@ This document is the **single source of truth** for state file schemas and share
 ```
 
 - `workType` ∈ {`feature`, `update`, `bugfix`} — **라벨 전용. 분기에 쓰지 않는다.**
-- `links`: 실행되어 Notion 페이지가 생긴 항목만 등재(sparse). 단일 페이지 → pageId 문자열, 다중 페이지(draw-data-flow) → `{ "<페이지 제목>": "<pageId>" }`.
+- `links`: **작성자와 무관하게** 이 작업의 정식 Notion 문서 링크. 키 존재 = 그 문서가 Notion에 존재함. 단일 페이지 → pageId 문자열, 다중 페이지(draw-data-flow) → `{ "<페이지 제목>": "<pageId>" }`. **권위 출처는 Notion(작업 row의 자식 페이지)이며 work.json.links는 그 캐시/인덱스**다. `notion-page-record` hook이 세션 내 생성 페이지를 즉시 기록(fast path)하고, `sync-links`가 작업 row 자식 페이지 전체와 reconcile(authoritative path)한다.
 - `referenceWork`: workType이 update이고 사용자가 참고 작업을 선택했을 때만 존재. 라벨 전용.
 - `reviewDone`: `false`로 초기화. `review-code` 완료 시 `true`로 갱신. `finish-work` 진입 유일 하드 선행조건.
 - stages/status 개념 없음. 초기화 시 `links: {}`.
@@ -112,3 +112,4 @@ WORKTYPE_LABEL = { feature: "신규 개발", update: "변경/고도화", bugfix:
 - Skills read/write these files directly via Read/Write/Bash tools — no function wrappers
 - Hook code (`hooks/lib/`) reads/writes the same schemas via Node.js
 - Schema changes happen here first, then downstream files (hook lib, skill bodies) are updated
+- `links` 동기화는 `hooks/lib/sync-links.js`가 담당: 작업 row 자식 페이지 `[{title,id}]`를 stdin으로 받아 `resolveKey`(constants.json)로 매칭·병합·atomicWrite. LLM은 links를 직접 쓰지 않는다.

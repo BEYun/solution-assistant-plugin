@@ -37,4 +37,4 @@
 
 ## 상태/스키마/상수 단일 출처
 
-상태 파일 스키마, 모든 작업목록 키와 라벨 매핑(`WORK_LIST`/`WORK_GROUPS`/`WORK_LABELS`/`TITLE_TO_KEY`) — 전부 `references/state-schema.md`에 있다. skill 본문에 중복 정의 금지.
+상태 파일 스키마, 모든 작업목록 키와 라벨 매핑(`WORK_LIST`/`WORK_GROUPS`/`WORK_LABELS`) — 전부 `references/state-schema.md`에 있다. TITLE_TO_KEY/KEY_TO_TITLE 런타임 정의는 `hooks/lib/constants.json` 참조. skill 본문에 중복 정의 금지.

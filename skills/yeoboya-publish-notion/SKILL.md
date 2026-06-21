@@ -21,7 +21,7 @@ title은 `hooks/lib/constants.json`의 `KEY_TO_TITLE[key]`에서 결정된다.
 - 단일 페이지 키(write-policy, write-domain, draw-ui-flow, write-qa 등): 호출자가 `title`을 전달하지 않는다. publish-notion이 `KEY_TO_TITLE[key][0]`을 페이지 제목으로 사용.
 - 다중 페이지 키(draw-data-flow): 호출자가 `title`을 전달한다. `KEY_TO_TITLE["draw-data-flow"]`의 값("데이터 흐름도" 또는 "통신 명세서") 중 하나여야 한다.
 
-`KEY_TO_TITLE`에 없는 title을 받으면 오류 처리한다.
+`KEY_TO_TITLE`에 없는 key+title 조합은 hook 기록 없이 Notion 페이지만 생성한다 (review-code 등 links 미기록 항목에서 활용).
 
 ## 3. 호출 형태
 

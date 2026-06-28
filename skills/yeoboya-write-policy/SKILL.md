@@ -1,6 +1,6 @@
 ---
 name: yeoboya-write-policy
-description: "Use ONLY when yeoboya-route-work triggers this work-list item. NEVER invoke directly. Reads referenced 기획서 from Notion, walks the user through review items, drafts the 정책서 markdown using references/policy-template.md, runs self-validation, then calls yeoboya-publish-notion with title='정책서'. The notion-page-record hook records the pageId into work.json.links automatically."
+description: "yeoboya-route-work이 이 작업목록 항목을 trigger할 때만 사용한다. 직접 호출 금지. Notion에서 참조된 기획서를 읽고, 검토 항목을 사용자와 함께 진행하며, references/policy-template.md로 정책서 markdown을 작성하고, 자체 검증을 실행한 뒤, title='정책서'로 yeoboya-publish-notion을 호출한다. notion-page-record hook이 pageId를 work.json.links에 자동으로 기록한다."
 user-invocable: false
 ---
 

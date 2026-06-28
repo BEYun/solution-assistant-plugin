@@ -1,6 +1,6 @@
 ---
 name: yeoboya-finish-work
-description: "Use ONLY when yeoboya-route-work triggers this 작업 종결 work-list item. NEVER invoke directly. Verifies git log commit-pattern compliance, reports which deliverables exist in work.json.links, toggles workspace.platform-matching iOS_완료/Android_완료 boolean on the work DB row, prints a closing report. Does not publish new pages, writes nothing to work.json, and does not touch 작업 상태."
+description: "yeoboya-route-work이 이 작업 종결 작업목록 항목을 trigger할 때만 사용한다. 직접 호출 금지. git log 커밋 패턴 준수를 검증하고, work.json.links에 어떤 산출물이 존재하는지 보고하며, 작업 DB row에서 workspace.platform에 대응하는 iOS_완료/Android_완료 boolean을 토글하고, 종결 보고서를 출력한다. 새 페이지를 게시하지 않고, work.json에 아무것도 쓰지 않으며, 작업 상태를 건드리지 않는다."
 user-invocable: false
 ---
 
@@ -27,16 +27,23 @@ user-invocable: false
 
 ## 2. git 검증
 
-```
-git log --grep='\[<작업번호>\]' --oneline
+`work.json.codeBaseSha`로 이 작업의 커밋을 range 수집하고 prefix 규약을 검사한다:
+
+```bash
+BASE=$(jq -r '.codeBaseSha // empty' .workflow/<작업번호>/work.json)
+if [ -n "$BASE" ]; then
+  git log "$BASE"..HEAD --oneline
+else
+  git log --grep='\[<작업번호>\]' --oneline   # legacy fallback
+fi
 ```
 
-각 커밋에 대해 메시지 표준 패턴 검사:
-- `[<작업번호>] [<phase>] ...` (write-code phase 커밋)
-- `[<작업번호>] fix: ...` (fix-bug)
+각 커밋 메시지 표준 패턴 검사:
+- `[<작업번호>] ...` (write-code → work 구현 커밋)
+- `[<작업번호>] fix: ...` (bug-fix / fix-bug)
 - `[<작업번호>] [qa-fix] ...` (fix-qa-bug)
 
-위반 커밋이 있으면 보고에 ⚠ 마커.
+range 안에서 위 prefix가 없는 커밋이 있으면 보고에 ⚠ 마커(인터리브된 타 작업 커밋일 수 있음 — 보고에 명시).
 
 ## 3. Notion 발행 상태 보고
 
@@ -63,20 +70,19 @@ yeoboya-publish-notion 호출:
 
 ## 5. 종결 보고 출력
 
-`.workflow/<작업번호>/code-phases.json`을 Read 시도.
+코드 작업은 `work.json.codeBaseSha..HEAD` range 커밋으로 요약한다(phase 개념 없음):
 
-- 파일이 없으면: `▸ 코드 작성 phase: (미실행)` 한 줄만 출력.
-- 파일이 있으면: `phases` 오브젝트의 키를 순서대로 순회하며 각 status 기준 출력:
-  - `"done"`        → `    ✓ <phase명>`
-  - `"in-progress"` → `    ⚠ <phase명> (진행 중)`
-  - `"todo"`        → `      <phase명> (미완료)`
+```bash
+BASE=$(jq -r '.codeBaseSha // empty' .workflow/<작업번호>/work.json)
+[ -n "$BASE" ] && git log "$BASE"..HEAD --oneline || echo "(코드 작업 미실행 — codeBaseSha 없음)"
+```
 
-출력 예시 — 2/4 완료:
+출력 예시 — 코드 작업 포함:
 
 ```
 [<작업번호>] <작업명> — <workType 한국어 라벨> 종결 보고
 
-▸ 커밋: <N>개 ✓
+▸ 커밋: <N>개 ✓ (codeBaseSha..HEAD)
 ▸ Notion 발행 (work.json.links 기준):
     ✓ 기획서 검토 (pageId: ...)
     ✓ 정책서
@@ -84,15 +90,15 @@ yeoboya-publish-notion 호출:
       UI 흐름도 (미발행)
     ✓ 데이터 흐름도 · 통신 명세서
     ✓ QA 시나리오
-▸ 코드 작성 phase:
-    ✓ api-client
-    ✓ repository
-    ⚠ view-model (진행 중)
-      ui (미완료)
+▸ 코드 작업:
+    ✓ <N>개 커밋 (work 닫힌 루프)
+    ⚠ prefix 규약 위반 커밋 <M>개 (있을 때만)
 ▸ 경고: <0 또는 ⚠ 항목>
 
 작업이 종결되었습니다.
 ```
+
+`codeBaseSha`가 없으면 `▸ 코드 작업: (미실행)` 한 줄만 출력한다.
 
 ## 6. Self-validation
 

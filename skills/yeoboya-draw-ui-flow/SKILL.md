@@ -1,6 +1,6 @@
 ---
 name: yeoboya-draw-ui-flow
-description: "Use ONLY when yeoboya-route-work triggers this work-list item. NEVER invoke directly. Defines screens with unique IDs, user actions with unique IDs per screen, and the screen-transition diagram. Self-validates that every screen-action pair has an ID (used by draw-data-flow for ID-based linking). Publishes Notion page titled 'UI 흐름도'."
+description: "yeoboya-route-work이 이 작업목록 항목을 trigger할 때만 사용한다. 직접 호출 금지. 고유 ID를 가진 화면, 화면별 고유 ID를 가진 사용자 액션, 그리고 화면 전환 다이어그램을 정의한다. 모든 화면-액션 쌍이 ID를 갖는지 자체 검증한다(draw-data-flow가 ID 기반 연결에 사용). 'UI 흐름도' 제목의 Notion 페이지를 게시한다."
 user-invocable: false
 ---
 

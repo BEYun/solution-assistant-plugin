@@ -1,6 +1,6 @@
 ---
 name: yeoboya-write-policy-feedback
-description: "Use ONLY when yeoboya-route-work triggers this skill. NEVER invoke directly. Reads referenced 기획서 PDF (path) or Notion 기획서 page, walks the user through 5-perspective review (화면 흐름·상태 정의·엣지 케이스·인터랙션·일관성), drafts the 기획서 검토 markdown using references/policy-feedback-template.md, runs self-validation, then calls yeoboya-publish-notion with key='write-policy-feedback'."
+description: "yeoboya-route-work이 이 스킬을 trigger할 때만 사용한다. 직접 호출 금지. 참조된 기획서 PDF(경로) 또는 Notion 기획서 페이지를 읽고, 5가지 관점 검토(화면 흐름·상태 정의·엣지 케이스·인터랙션·일관성)를 사용자와 함께 진행하며, references/policy-feedback-template.md로 기획서 검토 markdown을 작성하고, 자체 검증을 실행한 뒤, key='write-policy-feedback'로 yeoboya-publish-notion을 호출한다."
 user-invocable: false
 ---
 

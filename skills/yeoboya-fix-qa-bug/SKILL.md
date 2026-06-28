@@ -1,6 +1,6 @@
 ---
 name: yeoboya-fix-qa-bug
-description: "Use ONLY when yeoboya-route-work triggers this work-list item, when the user has found a QA regression. NEVER invoke directly. NEVER use this for a brand-new user-reported bug — that's yeoboya-fix-bug. This is regression-scope: narrow diagnosis based on existing write-code result + QA scenario, quick patch, no full RCA. May be invoked multiple times during the QA cycle."
+description: "yeoboya-route-work이 이 작업목록 항목을 trigger할 때, 즉 사용자가 QA 회귀를 발견했을 때만 사용한다. 직접 호출 금지. 완전히 새로운 사용자 보고 버그에는 절대 사용하지 말 것 — 그건 yeoboya-fix-bug다. 이것은 회귀 범위 작업이다: 기존 write-code 결과 + QA 시나리오에 기반한 좁은 진단, 빠른 패치, 전체 RCA 없음. QA 사이클 동안 여러 번 호출될 수 있다."
 user-invocable: false
 ---
 

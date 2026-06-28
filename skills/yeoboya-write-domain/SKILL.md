@@ -1,6 +1,6 @@
 ---
 name: yeoboya-write-domain
-description: "Use ONLY when yeoboya-route-work triggers this work-list item. NEVER invoke directly. Fetches the 정책서 from Notion, walks the user through domain object/rule/actor/event modeling, runs self-validation, then calls yeoboya-publish-notion with title='도메인 명세서'."
+description: "yeoboya-route-work이 이 작업목록 항목을 trigger할 때만 사용한다. 직접 호출 금지. Notion에서 정책서를 가져와, 도메인 객체/규칙/액터/이벤트 모델링을 사용자와 함께 진행하고, 자체 검증을 실행한 뒤, title='도메인 명세서'로 yeoboya-publish-notion을 호출한다."
 user-invocable: false
 ---
 

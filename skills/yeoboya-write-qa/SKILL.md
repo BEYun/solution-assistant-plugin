@@ -1,6 +1,6 @@
 ---
 name: yeoboya-write-qa
-description: "Use ONLY when yeoboya-route-work triggers this work-list item. NEVER invoke directly. Derives QA scenarios from prior deliverables (UI 흐름도, 데이터 흐름도, write-code commits): golden path, edge cases, regression. Self-validates, then publishes 'Notion QA 시나리오'."
+description: "yeoboya-route-work이 이 작업목록 항목을 trigger할 때만 사용한다. 직접 호출 금지. 이전 산출물(UI 흐름도, 데이터 흐름도, write-code 커밋)로부터 QA 시나리오를 도출한다: 골든 패스, 엣지 케이스, 회귀. 자체 검증한 뒤 'Notion QA 시나리오'를 게시한다."
 user-invocable: false
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: yeoboya-route-work
-description: "Use when the user invokes /yeoboya-route-work, or expresses intent to open the work-list or run an operation ('작업 진행', '작업목록', '다음 작업'). Scans .workflow/ for work items (each has a work.json), lets the user pick one (activeWork marked [현재]), then shows the FULL work-list grouped by phase with no recommendation and triggers the chosen yeoboya-<key> skill via the Skill tool. Includes the write-code entry gate (sync-links + required-document check; workType=feature hard-blocks when 정책서/UI 흐름도/데이터 흐름도 are missing) before committing to implementation."
+description: "사용자가 /yeoboya-route-work을 호출하거나, 작업목록을 열거나 작업을 진행하려는 의도를 표현할 때('작업 진행', '작업목록', '다음 작업') 사용한다. .workflow/에서 작업 항목(각각 work.json을 가짐)을 스캔하고, 사용자가 하나를 고르게 하며(activeWork는 [현재]로 표시), 추천 없이 phase별로 그룹화된 전체 작업목록을 보여준 뒤 Skill 도구로 선택된 yeoboya-<key> 스킬을 trigger한다. 구현에 착수하기 전 write-code 진입 게이트(sync-links + 필수 문서 검사; workType=feature는 정책서/UI 흐름도/데이터 흐름도가 없으면 하드 블록)를 포함한다."
 user-invocable: true
 ---
 

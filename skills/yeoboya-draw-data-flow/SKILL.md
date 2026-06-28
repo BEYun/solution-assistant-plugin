@@ -1,6 +1,6 @@
 ---
 name: yeoboya-draw-data-flow
-description: "Use ONLY when yeoboya-route-work triggers this work-list item. NEVER invoke directly. For each user action ID from the UI 흐름도, defines the corresponding data flow action (API endpoint, Socket event, or local operation). Endpoints follow /도메인명 convention. Self-validates that every UI action ID is mapped. Publishes 'Notion 데이터 흐름도'."
+description: "yeoboya-route-work이 이 작업목록 항목을 trigger할 때만 사용한다. 직접 호출 금지. UI 흐름도의 각 사용자 액션 ID마다 대응하는 데이터 흐름 액션(API 엔드포인트, Socket 이벤트, 또는 로컬 연산)을 정의한다. 엔드포인트는 /도메인명 규칙을 따른다. 모든 UI 액션 ID가 매핑되었는지 자체 검증한다. 'Notion 데이터 흐름도'를 게시한다."
 user-invocable: false
 ---
 

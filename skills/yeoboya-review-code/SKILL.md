@@ -1,6 +1,6 @@
 ---
 name: yeoboya-review-code
-description: "Use ONLY when yeoboya-route-work triggers this work-list item. NEVER invoke directly. Collects work-related diff via `git log --grep='[<작업번호>]'`, dispatches code-reviewer subagent for findings, lets user decide fix-or-pass per finding. Output: review markdown + (optional) Notion page. Notion publish is optional."
+description: "yeoboya-route-work이 이 작업목록 항목을 trigger할 때만 사용한다. 직접 호출 금지. `git log --grep='[<작업번호>]'`로 작업 관련 diff를 수집하고, code-reviewer 서브에이전트를 디스패치해 발견사항을 도출하며, 발견사항마다 사용자가 수정-또는-통과를 결정하게 한다. 출력: 리뷰 markdown + (선택) Notion 페이지. Notion 게시는 선택사항이다."
 user-invocable: false
 ---
 
@@ -12,12 +12,28 @@ user-invocable: false
 
 - work.json 존재.
 - 리뷰 대상 코드(git 커밋)가 있으면 진행한다.
+- `work.json.codeBaseSha`(write-code가 work 호출 직전 기록한 코드 시작 SHA)를 §2 diff 수집의 기준점으로 쓴다. 없거나 `null`이면 legacy 경로(`git log --grep`)로 대체한다.
 
 ## 2. diff 수집
 
+`work.json.codeBaseSha`를 읽어 **range**로 수집한다(work이 작성한 커밋은 prefix가 빠져도 누락 없이 잡힌다 — 하이브리드 안전망):
+
+```bash
+BASE=$(jq -r '.codeBaseSha // empty' .workflow/<작업번호>/work.json)
+if [ -n "$BASE" ]; then
+  git log  "$BASE"..HEAD --oneline      # 이 작업 시작 이후 전부
+  git diff "$BASE"..HEAD                # 리뷰 대상 diff
+else
+  # legacy fallback (codeBaseSha 없음)
+  git log  --grep='\[<작업번호>\]' --oneline
+  git diff <첫 커밋>^..<마지막 커밋>
+fi
 ```
-git log --grep='\[<작업번호>\]' --oneline
-git diff <첫 커밋>^..<마지막 커밋>
+
+range 안에서 `[<작업번호>]` prefix가 없는 커밋은 **⚠로 표면화**한다(커밋 규약 위반 가시화 — 조용히 버리지 않음). 인터리브된 다른 작업의 커밋이면 사용자에게 이 작업 소속인지 확인받는다:
+
+```bash
+git log "$BASE"..HEAD --oneline | grep -v '\[<작업번호>\]'   # 있으면 ⚠ 보고
 ```
 
 수집된 diff 요약을 사용자에게 노출 (그라운딩).
@@ -29,7 +45,7 @@ git diff <첫 커밋>^..<마지막 커밋>
 ## 4. 사용자 결정 게이트
 
 리뷰 산출물의 각 발견 사항마다:
-- **수정** → 작은 수정 직접 적용 후 커밋. 큰 수정이면 "변경점 phase 재실행 권장" 안내 후 route-work 복귀
+- **수정** → 작은 수정 직접 적용 후 커밋. 큰 수정이면 route-work → write-code 재개로 안내(write-code가 하네스 `work`으로 재개 처리)
 - **수용** → 리뷰 산출물에 "수용" 표시
 - **반박** → 사용자가 이유 작성, 산출물에 "반박" 표시
 

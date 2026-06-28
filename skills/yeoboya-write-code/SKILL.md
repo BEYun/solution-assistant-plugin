@@ -1,17 +1,18 @@
 ---
 name: yeoboya-write-code
-description: "yeoboya-route-work이 이 작업목록 항목을 trigger할 때만 사용한다. 직접 호출 금지. 선행 Notion 산출물(정책서/도메인/데이터 흐름도)과 하네스 문서를 읽어 .workflow/<작업번호>/plan.md(코드 작업 계획서)를 작성하고, work.json.codeBaseSha를 기록한 뒤, 하네스 플러그인의 work 닫힌 루프에 구현을 위임한다. phase 시스템은 더 이상 쓰지 않는다. yeoboya-publish-notion을 호출하지 않는다."
+description: "yeoboya-select-subtask이 이 세부 작업을 trigger할 때만 사용한다. 직접 호출 금지. 선행 Notion 산출물(정책서/도메인/데이터 흐름도)과 하네스 문서를 읽어 .workflow/<작업번호>/plan.md(코드 작업 계획서)를 작성하고, work.json.codeBaseSha를 기록한 뒤, 하네스 플러그인의 work 닫힌 루프에 구현을 위임한다. phase 시스템은 더 이상 쓰지 않는다. yeoboya-publish-notion을 호출하지 않는다."
 user-invocable: false
 ---
 
 # yeoboya-write-code
 
 코드 작업 계획 수립 + 하네스 `work` 닫힌 루프 위임. (v1 phase 시스템 폐기 — 구현·TDD·검증·bug-fix·harness 루프는 전부 `work`이 주도한다.)
+> 이하 `work` = 하네스 work.
 
 ## 1. 전제
 
 - work.json 존재.
-- route-work이 **write-code 진입 게이트(route-work §6)**를 이미 통과: sync-links로 `work.json.links`가 최신화되었고, **feature는 정책서·UI 흐름도·데이터 흐름도 3종이 links에 존재함이 보장된다(하드 선행조건)**. update/bugfix는 일부가 없을 수 있다.
+- select-subtask이 **write-code 진입 게이트(select-subtask §6)**를 이미 통과: sync-links로 `work.json.links`가 최신화되었고, **feature는 정책서·UI 흐름도·데이터 흐름도 3종이 links에 존재함이 보장된다(하드 선행조건)**. update/bugfix는 일부가 없을 수 있다.
 - **하네스 부트스트랩 가정**: `.workflow/workspace.json`의 `harness.bootstrapped`를 읽는다(repo 스캔 아님 — 플래그 1회 읽기). `true`가 아니면 아래 안내 후 **즉시 종료**(work을 호출하지 않는다):
   ```
   이 repo는 하네스 부트스트랩이 확인되지 않았습니다(harness.bootstrapped ≠ true).
@@ -104,10 +105,10 @@ work이 완료(모든 완료기준 통과)를 보고하면:
 ```
 코드 작업 완료 (work 닫힌 루프 종료).
 다음 권장 단계: 코드 리뷰.
-새 세션에서 /yeoboya-route-work을 호출하세요.
+새 세션에서 /yeoboya-select-subtask을 호출하세요.
 ```
 
-work이 도중 중단(harness-check 사람 게이트, bug-fix 한도 등)되면 work의 보고를 그대로 사용자에게 전달하고, 재개는 `/yeoboya-route-work → write-code`(§4)로 안내한다.
+work이 도중 중단(harness-check 사람 게이트, bug-fix 한도 등)되면 work의 보고를 그대로 사용자에게 전달하고, 재개는 `/yeoboya-select-subtask → write-code`(§4)로 안내한다.
 
 ## 6. Self-validation
 

@@ -1,6 +1,6 @@
 ---
 name: yeoboya-fix-bug
-description: "yeoboya-route-work이 workType=bugfix에 대해 이 작업목록 항목을 trigger할 때만 사용한다. 직접 호출 금지. QA에서 발견된 회귀에는 절대 사용하지 말 것 — 그건 yeoboya-fix-qa-bug다. 이 스킬은 사용자가 보고한 버그의 풀뎁스 진단(재현, 근본 원인 분석, 수정, 테스트)을 위한 것이다. 출력은 표준 패턴의 git 커밋이며, Notion 게시는 없다."
+description: "yeoboya-select-subtask이 workType=bugfix에 대해 이 세부 작업을 trigger할 때만 사용한다. 직접 호출 금지. QA에서 발견된 회귀에는 절대 사용하지 말 것 — 그건 yeoboya-fix-qa-bug다. 이 스킬은 사용자가 보고한 버그의 풀뎁스 진단(재현, 근본 원인 분석, 수정, 테스트)을 위한 것이다. 출력은 표준 패턴의 git 커밋이며, Notion 게시는 없다."
 user-invocable: false
 ---
 
@@ -43,5 +43,5 @@ user-invocable: false
 
 ```
 버그 수정 완료. 다음 권장 단계: 코드 리뷰.
-새 세션에서 /yeoboya-route-work을 호출하세요.
+새 세션에서 /yeoboya-select-subtask을 호출하세요.
 ```

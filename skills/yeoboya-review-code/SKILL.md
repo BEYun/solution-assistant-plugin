@@ -1,6 +1,6 @@
 ---
 name: yeoboya-review-code
-description: "yeoboya-route-work이 이 작업목록 항목을 trigger할 때만 사용한다. 직접 호출 금지. `git log --grep='[<작업번호>]'`로 작업 관련 diff를 수집하고, code-reviewer 서브에이전트를 디스패치해 발견사항을 도출하며, 발견사항마다 사용자가 수정-또는-통과를 결정하게 한다. 출력: 리뷰 markdown + (선택) Notion 페이지. Notion 게시는 선택사항이다."
+description: "yeoboya-select-subtask이 이 세부 작업을 trigger할 때만 사용한다. 직접 호출 금지. `git log --grep='[<작업번호>]'`로 작업 관련 diff를 수집하고, code-reviewer 서브에이전트를 디스패치해 발견사항을 도출하며, 발견사항마다 사용자가 수정-또는-통과를 결정하게 한다. 출력: 리뷰 markdown + (선택) Notion 페이지. Notion 게시는 선택사항이다."
 user-invocable: false
 ---
 
@@ -12,7 +12,7 @@ user-invocable: false
 
 - work.json 존재.
 - 리뷰 대상 코드(git 커밋)가 있으면 진행한다.
-- `work.json.codeBaseSha`(write-code가 work 호출 직전 기록한 코드 시작 SHA)를 §2 diff 수집의 기준점으로 쓴다. 없거나 `null`이면 legacy 경로(`git log --grep`)로 대체한다.
+- `work.json.codeBaseSha`(write-code가 하네스 work 호출 직전 기록한 코드 시작 SHA)를 §2 diff 수집의 기준점으로 쓴다. 없거나 `null`이면 legacy 경로(`git log --grep`)로 대체한다.
 
 ## 2. diff 수집
 
@@ -45,7 +45,7 @@ git log "$BASE"..HEAD --oneline | grep -v '\[<작업번호>\]'   # 있으면 ⚠
 ## 4. 사용자 결정 게이트
 
 리뷰 산출물의 각 발견 사항마다:
-- **수정** → 작은 수정 직접 적용 후 커밋. 큰 수정이면 route-work → write-code 재개로 안내(write-code가 하네스 `work`으로 재개 처리)
+- **수정** → 작은 수정 직접 적용 후 커밋. 큰 수정이면 select-subtask → write-code 재개로 안내(write-code가 하네스 `work`으로 재개 처리)
 - **수용** → 리뷰 산출물에 "수용" 표시
 - **반박** → 사용자가 이유 작성, 산출물에 "반박" 표시
 
@@ -82,5 +82,5 @@ yeoboya-publish-notion 호출:
 
 ```
 코드 리뷰 완료. 다음 권장 단계: QA 시나리오.
-새 세션에서 /yeoboya-route-work을 호출하세요.
+새 세션에서 /yeoboya-select-subtask을 호출하세요.
 ```

@@ -15,14 +15,14 @@ description: "사용자가 /yeoboya-setup-workspace를 호출할 때, workspace.
 |---|---|
 | superpowers 플러그인 | superpowers의 skill 중 하나(예: `brainstorming`, `writing-plans`)가 available skills에 노출되는지 |
 | Notion MCP | `mcp__claude_ai_Notion__notion-search`를 빈 쿼리(`""`)로 실제 호출한다. 응답이 오면(빈 결과라도) 가용. 도구를 찾을 수 없다는 오류가 나면 미설치. |
-| 하네스 플러그인 | 하네스 스킬(예: `harness-root`, `harness-check`)이 available skills에 노출되는지. write-code가 `work` 닫힌 루프에 위임하므로 하드 의존이다. |
+| 하네스 플러그인 | 하네스 스킬(예: `harness-root`, `harness-check`)이 available skills에 노출되는지. write-code가 하네스 `work` 닫힌 루프에 위임하므로 하드 의존이다. |
 
 누락 시 출력 예시:
 ```
 plugin v2는 다음 설치가 필요합니다:
   - superpowers 플러그인 (https://github.com/anthropics/claude-plugins)
   - Notion MCP (notion-search 도구 호출 실패)
-  - 하네스 플러그인 (harness-root 스킬 미노출 — work 닫힌 루프 의존)
+  - 하네스 플러그인 (harness-root 스킬 미노출 — 하네스 work 닫힌 루프 의존)
 
 설치 후 다시 /yeoboya-setup-workspace를 호출하세요.
 ```
@@ -92,7 +92,7 @@ prerequisite 통과 후 사용자에게 순차 질문:
 ```
 워크스페이스 설정 완료. 다음 단계:
   새 작업: /yeoboya-create-work <작업번호>
-  진행 중 작업 재개: /yeoboya-route-work
+  진행 중 작업 재개: /yeoboya-select-subtask
 ```
 
 ## 5. Self-validation

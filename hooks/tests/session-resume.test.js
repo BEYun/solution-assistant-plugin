@@ -22,7 +22,7 @@ test('emits empty stdout (silent) when no activeWork', () => {
   assert.equal(result.stdout.trim(), '');
 });
 
-test('emits resume block with work + workType + route-work when work.json exists', () => {
+test('emits resume block with work + workType + select-subtask when work.json exists', () => {
   const root = tmpRoot();
   const ws = path.join(root, '.workflow', 'workspace.json');
   fs.mkdirSync(path.dirname(ws), { recursive: true });
@@ -36,7 +36,7 @@ test('emits resume block with work + workType + route-work when work.json exists
   assert.match(ctx, /<yeoboya-workflow-resume>/);
   assert.match(ctx, /DCL-1234/);
   assert.match(ctx, /feature/);
-  assert.match(ctx, /\/yeoboya-route-work/);
+  assert.match(ctx, /\/yeoboya-select-subtask/);
 });
 
 test('emits create-work guidance when activeWork present but no work.json', () => {

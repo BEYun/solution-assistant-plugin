@@ -24,7 +24,7 @@ function buildResumeBlock({ work, data }) {
   } else {
     lines.push(`workType: ${data.workType ?? '미지정'}`);
     lines.push('');
-    lines.push('작업목록을 열려면 `/yeoboya-route-work`을 호출하세요.');
+    lines.push('세부작업 목록을 열려면 `/yeoboya-select-subtask`을 호출하세요.');
   }
   lines.push('</yeoboya-workflow-resume>');
   return lines.join('\n');

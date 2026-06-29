@@ -55,14 +55,24 @@ CONVENTIONS/ARCHITECTURE(검토 기준)에 의존합니다.
 
 ## 2. 입력 수집 (순서)
 
-prerequisite 통과 후 사용자에게 순차 질문:
+prerequisite 통과 후 사용자에게 순차 질문. **자유입력 항목은 없다** — 사용자에게 묻는 것은 아래 3개뿐이고, Notion 식별자(작업 DB URL·작업자 페이지 ID)는 §2.5에서 Notion에서 fetch해 자동 확정한다.
 
 1. **서비스 선택** (1~5): 달라 / 클럽라이브 / 여보야 / 클럽5678 / AI식단
 2. **플랫폼** (iOS / Android)
 3. **작업자 이름** (예: "윤병은")
-4. **Notion 작업 DB DataSource URL** — Notion 작업 DB의 data source URL
-5. **작업자 Notion 페이지 ID** — workerPageId (Notion 사용자/페이지 ID)
-6. **도메인 매핑** — services 5개 외에 Notion DB의 '도메인' select 값이 다르면 매핑 표 작성 (옵션)
+
+> 작업 DB URL·작업자 페이지 ID를 사용자에게 직접 입력받지 않는다. 도메인 매핑은 수집하지 않는다(작업 단위 관심사 — Notion 작업 row의 `도메인` select가 권위 출처이며 workspace는 알 필요 없음).
+
+## 2.5 Notion 식별자 fetch (자동 확정)
+
+§2의 서비스·작업자 이름을 바탕으로 두 식별자를 Notion에서 **검색해 확정**한다. 확정값은 §3에서 `workspace.json.notion`에 캐시 저장하며, 이후 publish-notion/create-work이 그대로 읽는다.
+
+| 식별자 | fetch 방법 |
+|---|---|
+| `workerPageId` | 이름이 `__notion-get-users`로 끝나는 도구로 워크스페이스 멤버를 나열하고 §2의 작업자 이름과 매칭한다. 1명 매칭 → 그 페이지 ID 확정. 0명/다수 → 후보를 사용자에게 보여주고 1개 선택하게 한다. (도구명 접두사 `mcp__<서버>__`는 커넥터마다 다르니 suffix로 매칭 — §1 Notion MCP 규약과 동일.) |
+| `workDbDataSourceUrl` | 이름이 `__notion-search`로 끝나는 도구를 §2의 **서비스명을 쿼리**로 호출해 그 서비스의 작업 DB(data source)를 찾는다. 서비스별로 작업 DB가 다르므로 선택 서비스 기준으로 해소한다. 정확히 1개 → data source URL 확정. 0개/다수 → 후보(제목+URL)를 보여주고 1개 선택하게 한다. |
+
+매칭이 모호하면 임의 선택하지 말고 반드시 사용자에게 확인받는다. 두 값 모두 확정돼야 §3로 진행한다.
 
 ## 3. `.workflow/workspace.json` 작성
 
@@ -77,12 +87,12 @@ prerequisite 통과 후 사용자에게 순차 질문:
   "harness": { "bootstrapped": false, "checkedAt": "2026-06-28" },
   "notion": {
     "workDbDataSourceUrl": "https://...",
-    "workerPageId": "abc...",
-    "domainMapping": {}
+    "workerPageId": "abc..."
   }
 }
 ```
 
+`notion.workDbDataSourceUrl`/`workerPageId`는 §2.5에서 fetch한 확정값을 캐시한다(사용자 입력값이 아님). `domainMapping`은 더 이상 두지 않는다.
 `harness.bootstrapped`/`checkedAt`은 §1.5 확인 결과로 채운다. `checkedAt`은 `TZ=Asia/Seoul date +%Y-%m-%d`.
 
 이미 `.workflow/workspace.json`이 존재하면 갱신 모드 — 기존 값을 default로 보여주고 변경 항목만 수정.
@@ -99,4 +109,6 @@ prerequisite 통과 후 사용자에게 순차 질문:
 
 publish 단계가 없는 skill이지만, workspace.json 작성 직전에 다음을 확인:
 - 모든 필수 필드 채워졌는지 (services, platform, worker, notion.workDbDataSourceUrl, notion.workerPageId, harness.bootstrapped)
+- `notion.workDbDataSourceUrl`/`workerPageId`가 §2.5 fetch로 확정된 값인지 (빈 문자열/플레이스홀더 아님)
+- `notion`에 `domainMapping` 키가 없는지
 - JSON 파싱 가능한지 (`JSON.stringify` round-trip)

@@ -98,4 +98,4 @@ ID↔URL 변환(예: `workspace.notion.workerPageId` → 페이지 URL)은 본 s
 
 ## 7. 에이전트 사용
 
-본 skill은 `agents/notion-writer.md`를 subagent로 호출하여 실제 도구 호출과 페이로드 빌딩을 위임할 수 있다. 단순 호출은 본 skill 본문에서 직접 처리.
+본 skill은 `notion-writer` 서브에이전트(`agents/notion-writer.md`)를 호출하여 실제 도구 호출과 페이로드 빌딩을 위임할 수 있다. 단순 호출은 본 skill 본문에서 직접 처리.

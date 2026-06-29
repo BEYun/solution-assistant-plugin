@@ -40,7 +40,13 @@ git log "$BASE"..HEAD --oneline | grep -v '\[<작업번호>\]'   # 있으면 ⚠
 
 ## 3. subagent 호출
 
-`agents/code-reviewer.md` subagent에게 위임. 응답으로 리뷰 산출물 (마크다운) 수신.
+`code-reviewer` 서브에이전트(`agents/code-reviewer.md`)에게 위임한다. 격리 검토자이므로 입력은 prompt에 직렬화한 payload만 사용한다 — 아래를 수집해 주입한다:
+
+- `task`: work.json의 `name`·`workType`
+- `diff`: §2에서 수집한 `files`·`fullDiff`
+- `context.conventions`: 루트 `CLAUDE.md` + (변경 파일이 속한) 모듈 `CLAUDE.md`를 Read한 본문. 없으면 빈 값
+
+응답으로 정형 마크다운 리뷰 산출물을 수신하고, `## 종합 판정`의 `status`(`pass | issues`) 토큰을 파싱해 §4로 넘긴다.
 
 ## 4. 사용자 결정 게이트
 

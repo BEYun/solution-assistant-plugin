@@ -61,7 +61,7 @@ prerequisite 통과 후 사용자에게 묻는 것은 아래 3개뿐이고, Noti
 
 1. **서비스 선택** — 먼저 이것만 묻는다. 보기: 1. 달라 2. 클럽라이브 3. 여보야 4. 클럽5678 5. AI식단. 답을 받기 전에는 다음 질문을 하지 않는다.
 2. **플랫폼** — 서비스 답을 받은 뒤에만 묻는다. 보기: iOS / Android.
-3. **작업자 이름** — 플랫폼 답을 받은 뒤에만 묻는다 (예: "윤병은").
+3. **작업자 이름** — 플랫폼 답을 받은 뒤에만 묻는다 (예: "홍길동").
 
 세 답이 모두 모인 뒤에 "Notion에서 작업 DB와 작업자를 확인합니다"라고 안내하고 §2.5로 진행한다.
 
@@ -77,9 +77,9 @@ prerequisite 통과 후 사용자에게 묻는 것은 아래 3개뿐이고, Noti
 2. 그 페이지를 `__notion-fetch`로 열어 `작업 목록` 자식 페이지를 찾는다.
 3. `작업 목록`을 `__notion-fetch`로 열면 인라인 `<database … data-source-url="collection://…">`가 있다. 그 `data-source-url`이 확정값이다.
 
-**`workerPageId` — 팀원 목록 DB의 작업자 행.** 워크스페이스 계정(`get-users`)이 **아니다** — 전 서비스 공용 `팀원 목록` 사람 DB의 한 행이다. 사람 DB URL은 `notion-schema.md §1` 고정값(`collection://cc47fa31-…`)이며, 없으면 `__notion-search query="팀원 목록"`의 `type=database` 결과를 fetch해 얻는다.
+**`workerPageId` — 팀원 목록 DB의 작업자 행.** 워크스페이스 계정(`get-users`)이 **아니다** — 전 서비스 공용 `팀원 목록` DB의 한 행이다. 팀원 목록 DB URL은 `notion-schema.md §1` 고정값(`collection://cc47fa31-…`)이며, 없으면 `__notion-search query="팀원 목록"`의 `type=database` 결과를 fetch해 얻는다.
 
-1. `__notion-query-data-sources`로 조회한다: `SELECT url, "이름" FROM "<사람 DB url>" WHERE "이름" = '<작업자>'`.
+1. `__notion-query-data-sources`로 조회한다: `SELECT url, "이름" FROM "<팀원 목록 DB url>" WHERE "이름" = '<작업자>'`.
 2. 1행이면 그 `url`의 페이지 ID가 확정값이다.
 3. 다수면 `개발 서비스`(§2 서비스 포함)·`플랫폼`으로 좁힌다.
 
@@ -91,7 +91,7 @@ prerequisite 통과 후 사용자에게 묻는 것은 아래 3개뿐이고, Noti
 {
   "services": ["달라", "클럽라이브", "여보야", "클럽5678", "AI식단"],
   "platform": "iOS",
-  "worker": "윤병은",
+  "worker": "홍길동",
   "activeWork": null,
   "harness": { "bootstrapped": false, "checkedAt": "2026-06-28" },
   "notion": {

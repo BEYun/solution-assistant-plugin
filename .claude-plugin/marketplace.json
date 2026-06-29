@@ -1,6 +1,6 @@
 {
   "name": "yeoboya-workflow",
-  "owner": { "name": "윤병은" },
+  "owner": { "name": "yeoboya" },
   "metadata": {
     "description": "여보야 솔루션개발부 워크플로우 플러그인 카탈로그",
     "version": "1.0.4"

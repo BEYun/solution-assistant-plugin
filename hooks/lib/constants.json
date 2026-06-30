@@ -2,7 +2,9 @@
   "NOTION_TOOL_NAMES": {
     "search": "notion-search",
     "createPages": "notion-create-pages",
-    "updatePage": "notion-update-page"
+    "updatePage": "notion-update-page",
+    "createDatabase": "notion-create-database",
+    "queryDataSources": "notion-query-data-sources"
   },
   "TITLE_TO_KEY": {
     "기획서 검토":   "write-policy-feedback",

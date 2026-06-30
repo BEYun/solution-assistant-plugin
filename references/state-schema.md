@@ -145,8 +145,11 @@ SUBTASK_LABELS = {
 # - isMultiPageKey(notion.js): 버전드 키는 다중 페이지로 취급 → links[key][전체제목]에 버전별 누적
 #   (draw-data-flow의 {title:id}와 동일 구조). 같은 버전 재게시만 해당 페이지 update.
 
-# NOTION_TOOL_NAMES = { search: "notion-search", createPages: "notion-create-pages", updatePage: "notion-update-page" }
-# 런타임 정의: hooks/lib/constants.json (단일 SOT).
+# NOTION_TOOL_NAMES = { search: "notion-search", createPages: "notion-create-pages", updatePage: "notion-update-page",
+#                       createDatabase: "notion-create-database", queryDataSources: "notion-query-data-sources" }
+# 런타임 정의: hooks/lib/constants.json (단일 SOT). createDatabase/queryDataSources는 write-qa의 QA 시나리오
+# 데이터베이스 산출물(notion-schema §1, publish-notion dispatch-db §4.5)에서 쓰는 suffix다. hook의 write 도구
+# 판정(isNotionWriteTool)은 createPages/updatePage만 사용하므로 이 두 키 추가는 hook 동작에 영향이 없다.
 # Notion MCP 도구는 mcp__<server>__<toolName> 구조이고 <server> 접두사는 커넥터마다
 # 다르다(로컬=이름, claude.ai 커넥터=UUID). hook/스킬은 서버명에 결합하지 말고 이 toolName
 # suffix로 매칭한다(notion.js: isNotionWriteTool/notionToolKind = ^mcp__.+__<suffix>$).

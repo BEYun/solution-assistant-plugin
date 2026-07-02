@@ -1,6 +1,6 @@
 ---
 name: yeoboya-finish-task
-description: "yeoboya-select-subtask이 이 과제 종결 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. git log 커밋 패턴 준수를 검증하고, task.json.links에 어떤 산출물이 존재하는지 보고하며, 과제 DB row에서 workspace.platform에 대응하는 iOS_완료/Android_완료 boolean을 토글하고, 종결 보고서를 출력한다. 새 페이지를 게시하지 않고, task.json에 아무것도 쓰지 않으며, 과제 상태를 건드리지 않는다."
+description: "yeoboya-choose-subtask이 이 과제 종결 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. git log 커밋 패턴 준수를 검증하고, task.json.links에 어떤 산출물이 존재하는지 보고하며, 과제 DB row에서 workspace.platform에 대응하는 iOS_완료/Android_완료 boolean을 토글하고, 종결 보고서를 출력한다. 새 페이지를 게시하지 않고, task.json에 아무것도 쓰지 않으며, 과제 상태를 건드리지 않는다."
 user-invocable: false
 ---
 
@@ -10,7 +10,7 @@ user-invocable: false
 
 ## 0. 선행조건 확인 (필수 첫 단계)
 
-`.workflow/<과제번호>/task.json`을 Read → `codeReviewDone` 확인.
+`.assistant/<과제번호>/task.json`을 Read → `codeReviewDone` 확인.
 
 `codeReviewDone`이 `false`이거나 필드가 없으면:
 ```
@@ -30,7 +30,7 @@ user-invocable: false
 `task.json.codeBaseSha`로 이 과제의 커밋을 range 수집하고 prefix 규약을 검사한다:
 
 ```bash
-BASE=$(jq -r '.codeBaseSha // empty' .workflow/<과제번호>/task.json)
+BASE=$(jq -r '.codeBaseSha // empty' .assistant/<과제번호>/task.json)
 if [ -n "$BASE" ]; then
   git log "$BASE"..HEAD --oneline
 else
@@ -73,7 +73,7 @@ yeoboya-publish-notion 호출:
 코드 과제는 `task.json.codeBaseSha..HEAD` range 커밋으로 요약한다(phase 개념 없음):
 
 ```bash
-BASE=$(jq -r '.codeBaseSha // empty' .workflow/<과제번호>/task.json)
+BASE=$(jq -r '.codeBaseSha // empty' .assistant/<과제번호>/task.json)
 [ -n "$BASE" ] && git log "$BASE"..HEAD --oneline || echo "(코드 과제 미실행 — codeBaseSha 없음)"
 ```
 

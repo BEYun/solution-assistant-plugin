@@ -10,10 +10,10 @@ const { createPagesPayload, createPagesResponse, UUID_SERVER } = require('./fixt
 function tmpRoot() { return fs.mkdtempSync(path.join(os.tmpdir(), 'yb-page-record-')); }
 
 function setupWork(root, workData) {
-  const ws = path.join(root, '.workflow', 'workspace.json');
+  const ws = path.join(root, '.assistant', 'workspace.json');
   fs.mkdirSync(path.dirname(ws), { recursive: true });
   fs.writeFileSync(ws, JSON.stringify({ activeTask: 'DCL-1234' }));
-  const wf = path.join(root, '.workflow', 'DCL-1234', 'task.json');
+  const wf = path.join(root, '.assistant', 'DCL-1234', 'task.json');
   fs.mkdirSync(path.dirname(wf), { recursive: true });
   fs.writeFileSync(wf, JSON.stringify({ work: 'DCL-1234', taskType: 'feature', links: {}, ...workData }));
   return wf;

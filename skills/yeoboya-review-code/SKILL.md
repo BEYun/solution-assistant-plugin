@@ -1,6 +1,6 @@
 ---
 name: yeoboya-review-code
-description: "yeoboya-select-subtask이 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. `git log --grep='[<과제번호>]'`로 과제 관련 diff를 수집하고, code-reviewer 서브에이전트를 디스패치해 발견사항을 도출하며, 발견사항마다 사용자가 수정-또는-통과를 결정하게 한다. 출력: 리뷰 markdown + (선택) Notion 페이지. Notion 게시는 선택사항이다."
+description: "yeoboya-choose-subtask이 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. `git log --grep='[<과제번호>]'`로 과제 관련 diff를 수집하고, code-reviewer 서브에이전트를 디스패치해 발견사항을 도출하며, 발견사항마다 사용자가 수정-또는-통과를 결정하게 한다. 출력: 리뷰 markdown + (선택) Notion 페이지. Notion 게시는 선택사항이다."
 user-invocable: false
 ---
 
@@ -11,7 +11,7 @@ user-invocable: false
 ## 1. 전제
 
 - task.json 존재.
-- `task.json.codeWriteDone === true` 전제 — select-subtask이 review-code 진입 시 하드 게이트로 보장한다(없으면 진입 차단). 본 스킬은 별도로 재확인하지 않는다.
+- `task.json.codeWriteDone === true` 전제 — choose-subtask이 review-code 진입 시 하드 게이트로 보장한다(없으면 진입 차단). 본 스킬은 별도로 재확인하지 않는다.
 - 리뷰 대상 코드(git 커밋)가 있으면 진행한다.
 - `task.json.codeBaseSha`(write-code가 하네스 work 호출 직전 기록한 코드 시작 SHA)를 §2 diff 수집의 기준점으로 쓴다. 없거나 `null`이면 legacy 경로(`git log --grep`)로 대체한다.
 
@@ -20,7 +20,7 @@ user-invocable: false
 `task.json.codeBaseSha`를 읽어 **range**로 수집한다(work이 작성한 커밋은 prefix가 빠져도 누락 없이 잡힌다 — 하이브리드 안전망):
 
 ```bash
-BASE=$(jq -r '.codeBaseSha // empty' .workflow/<과제번호>/task.json)
+BASE=$(jq -r '.codeBaseSha // empty' .assistant/<과제번호>/task.json)
 if [ -n "$BASE" ]; then
   git log  "$BASE"..HEAD --oneline      # 이 과제 시작 이후 전부
   git diff "$BASE"..HEAD                # 리뷰 대상 diff
@@ -52,7 +52,7 @@ git log "$BASE"..HEAD --oneline | grep -v '\[<과제번호>\]'   # 있으면 ⚠
 ## 4. 사용자 결정 게이트
 
 리뷰 산출물의 각 발견 사항마다:
-- **수정** → 작은 수정 직접 적용 후 커밋. 큰 수정이면 select-subtask → write-code 재개로 안내(write-code가 하네스 `work`으로 재개 처리)
+- **수정** → 작은 수정 직접 적용 후 커밋. 큰 수정이면 choose-subtask → write-code 재개로 안내(write-code가 하네스 `work`으로 재개 처리)
 - **수용** → 리뷰 산출물에 "수용" 표시
 - **반박** → 사용자가 이유 작성, 산출물에 "반박" 표시
 
@@ -79,7 +79,7 @@ yeoboya-publish-notion 호출:
 
 리뷰 종료 직전 (publish 여부와 무관하게):
 
-`.workflow/<과제번호>/task.json`을 Read → `codeReviewDone` 필드를 `true`로 설정 → Write.
+`.assistant/<과제번호>/task.json`을 Read → `codeReviewDone` 필드를 `true`로 설정 → Write.
 
 이 단계를 건너뛰면 `finish-work` 진입이 영구 차단된다.
 
@@ -89,5 +89,5 @@ yeoboya-publish-notion 호출:
 
 ```
 코드 리뷰 완료. 다음 권장 단계: 과제 종결.
-새 세션에서 /yeoboya-select-subtask을 호출하세요.
+새 세션에서 /yeoboya-choose-subtask을 호출하세요.
 ```

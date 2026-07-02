@@ -15,11 +15,11 @@ function run(root, args, input) {
 
 test('records event from stdin JSON', () => {
   const root = tmpRoot();
-  const r = run(root, [], JSON.stringify({ category: 'gate-block', skill: 'yeoboya-select-subtask', severity: 'friction', what: 'feature 필수문서 누락', source: 'hook' }));
+  const r = run(root, [], JSON.stringify({ category: 'gate-block', skill: 'yeoboya-choose-subtask', severity: 'friction', what: 'feature 필수문서 누락', source: 'hook' }));
   assert.equal(r.status, 0);
   const [e] = readFrictionLog(root);
   assert.equal(e.category, 'gate-block');
-  assert.equal(e.skill, 'yeoboya-select-subtask');
+  assert.equal(e.skill, 'yeoboya-choose-subtask');
 });
 
 test('records event from argv shorthand', () => {

@@ -1,6 +1,6 @@
 ---
 name: yeoboya-write-policy
-description: "yeoboya-select-subtask이 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. Notion에서 참조된 기획서를 읽고, 검토 항목을 사용자와 함께 진행하며, references/policy-template.md로 정책서 markdown을 작성하고, 자체 검증을 실행한 뒤, title='정책서'로 yeoboya-publish-notion을 호출한다. notion-page-record hook이 pageId를 task.json.links에 자동으로 기록한다."
+description: "yeoboya-choose-subtask이 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. Notion에서 참조된 기획서를 읽고, 검토 항목을 사용자와 함께 진행하며, references/policy-template.md로 정책서 markdown을 작성하고, 자체 검증을 실행한 뒤, title='정책서'로 yeoboya-publish-notion을 호출한다. notion-page-record hook이 pageId를 task.json.links에 자동으로 기록한다."
 user-invocable: false
 ---
 
@@ -64,5 +64,5 @@ publish 후 notion-page-record hook이 task.json.links['write-policy']에 pageId
 
 ```
 정책서 작성 완료. 다음 권장 단계: 도메인 명세서.
-컨텍스트 정리를 위해 새 세션에서 /yeoboya-select-subtask을 호출하세요.
+컨텍스트 정리를 위해 새 세션에서 /yeoboya-choose-subtask을 호출하세요.
 ```

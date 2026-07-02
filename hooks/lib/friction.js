@@ -10,9 +10,9 @@ const VALID_CATEGORY = new Set([
 ]);
 const VALID_SEVERITY = new Set(['blocker', 'friction', 'nit']);
 
-function workflowDir(root) { return path.join(root, '.workflow'); }
-function logPath(root) { return path.join(workflowDir(root), 'improvement-log.jsonl'); }
-function markerDir(root) { return path.join(workflowDir(root), '.friction-session'); }
+function assistantDir(root) { return path.join(root, '.assistant'); }
+function logPath(root) { return path.join(assistantDir(root), 'improvement-log.jsonl'); }
+function markerDir(root) { return path.join(assistantDir(root), '.friction-session'); }
 function markerPath(root) { return path.join(markerDir(root), 'pending'); }
 
 function armRecovery(root) {
@@ -45,7 +45,7 @@ function logFriction(root, event) {
       expected: event.expected ? String(event.expected).slice(0, 500) : null,
       source,
     };
-    fs.mkdirSync(workflowDir(root), { recursive: true });
+    fs.mkdirSync(assistantDir(root), { recursive: true });
     fs.appendFileSync(logPath(root), JSON.stringify(rec) + '\n');
     if (source !== 'agent') armRecovery(root);
     return true;

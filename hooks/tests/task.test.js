@@ -7,8 +7,8 @@ const os = require('node:os');
 const task = require('../lib/task');
 
 function tmpRoot() { return fs.mkdtempSync(path.join(os.tmpdir(), 'yb-work-')); }
-function workspaceFile(root) { return path.join(root, '.workflow', 'workspace.json'); }
-function workFile(root, w) { return path.join(root, '.workflow', w, 'task.json'); }
+function workspaceFile(root) { return path.join(root, '.assistant', 'workspace.json'); }
+function workFile(root, w) { return path.join(root, '.assistant', w, 'task.json'); }
 
 test('readActiveTask returns null when workspace.json absent', () => {
   assert.equal(task.readActiveTask(tmpRoot()), null);

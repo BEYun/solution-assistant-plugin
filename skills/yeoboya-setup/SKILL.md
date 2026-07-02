@@ -1,11 +1,11 @@
 ---
-name: yeoboya-setup-workspace
-description: "사용자가 /yeoboya-setup-workspace를 호출할 때, workspace.json이 없어 다른 yeoboya-* 스킬이 부트스트랩해야 할 때, 또는 사용자가 'plugin setup', 'workspace setup', '플러그인 설정', '워크스페이스 설정'을 언급할 때 사용한다. 모든 /yeoboya-create-task 호출 이전에 반드시 먼저 실행해야 한다. superpowers · Notion MCP · 하네스 플러그인 3개 선행조건을 검증하고, 서비스/플랫폼/작업자/Notion 설정을 수집하며, .workflow/workspace.json을 작성한다."
+name: yeoboya-setup
+description: "사용자가 /yeoboya-setup을 호출할 때, workspace.json이 없어 다른 yeoboya-* 스킬이 부트스트랩해야 할 때, 또는 사용자가 'plugin setup', 'workspace setup', '플러그인 설정', '워크스페이스 설정'을 언급할 때 사용한다. 모든 /yeoboya-create-task 호출 이전에 반드시 먼저 실행해야 한다. superpowers · Notion MCP · 하네스 플러그인 3개 선행조건을 검증하고, 서비스/플랫폼/작업자/Notion 설정을 수집하며, .assistant/workspace.json을 작성한다."
 ---
 
-# yeoboya-setup-workspace
+# yeoboya-setup
 
-플러그인 최초 설정. `.workflow/workspace.json`을 생성한다.
+플러그인 최초 설정. `.assistant/workspace.json`을 생성한다.
 
 ## 1. Prerequisite 검증 (필수, 첫 단계)
 
@@ -24,7 +24,7 @@ description: "사용자가 /yeoboya-setup-workspace를 호출할 때, workspace.
   - Notion MCP (notion-search 도구 호출 실패)
   - 하네스 플러그인 (harness-root 스킬 미노출 — 하네스 work 닫힌 루프 의존)
 
-설치 후 다시 /yeoboya-setup-workspace를 호출하세요.
+설치 후 다시 /yeoboya-setup을 호출하세요.
 ```
 
 ## 1.5 하네스 부트스트랩 확인 (1회)
@@ -51,7 +51,7 @@ CONVENTIONS/ARCHITECTURE(검토 기준)에 의존합니다.
 먼저 1회: /harness-root 를 실행하면 위 루트 문서가 생깁니다.
 (leaf 모듈별 CLAUDE.md가 필요하면 이어서 /harness-module —
  부트스트랩 판정에는 필수가 아닙니다.)
-그 뒤 다시 /yeoboya-setup-workspace를 호출하면 부트스트랩이 확정됩니다.
+그 뒤 다시 /yeoboya-setup을 호출하면 부트스트랩이 확정됩니다.
 (부트스트랩 전에는 write-code가 work 호출을 차단합니다.)
 ```
 
@@ -65,7 +65,7 @@ prerequisite 통과 후 사용자에게 묻는 것은 아래 4개이고, Notion 
 2. **플랫폼** — 서비스 답을 받은 뒤에만 묻는다. 보기: iOS / Android.
 3. **작업자 이름** — 플랫폼 답을 받은 뒤에만 묻는다 (예: "홍길동").
 4. **디자인 툴** — 작업자 이름 답을 받은 뒤에만 묻는다. 보기: 1. Figma  2. Zeplin  3. 없음. 서비스마다 사용 툴이 달라 명시적으로 묻는다(추론 금지). 선택 후 아래 연결 안내를 1회 출력한다.
-   - **Figma/Zeplin 선택** → 안내: "write-code가 디자인을 읽으려면 해당 MCP 커넥터가 연결돼 있어야 합니다. 미연결이면 커넥터를 추가한 뒤 다시 /yeoboya-setup-workspace를 호출하세요(미연결이어도 설정은 저장됩니다)." 노출 도구에 그 툴의 대표 read 도구(`hooks/lib/constants.json`의 `DESIGN_TOOLS[<tool>].detectToolSuffixes` 중 하나라도, suffix 매칭 — 서버 접두사에 결합 금지)가 있으면 `design.connected=true`, 없으면 `false`로 §3에 기록한다(best-effort, 차단 없음).
+   - **Figma/Zeplin 선택** → 안내: "write-code가 디자인을 읽으려면 해당 MCP 커넥터가 연결돼 있어야 합니다. 미연결이면 커넥터를 추가한 뒤 다시 /yeoboya-setup을 호출하세요(미연결이어도 설정은 저장됩니다)." 노출 도구에 그 툴의 대표 read 도구(`hooks/lib/constants.json`의 `DESIGN_TOOLS[<tool>].detectToolSuffixes` 중 하나라도, suffix 매칭 — 서버 접두사에 결합 금지)가 있으면 `design.connected=true`, 없으면 `false`로 §3에 기록한다(best-effort, 차단 없음).
    - **없음 선택** → 안내 없이 `design.tool=null`로 기록. write-code에서 디자인 링크 물음을 생략한다.
 
 네 답이 모두 모인 뒤에 "Notion에서 과제 DB와 작업자를 확인합니다"라고 안내하고 §2.5로 진행한다.
@@ -88,7 +88,7 @@ prerequisite 통과 후 사용자에게 묻는 것은 아래 4개이고, Notion 
 2. 1행이면 그 `url`의 페이지 ID가 확정값이다.
 3. 다수면 `개발 서비스`(§2 서비스 포함)·`플랫폼`으로 좁힌다.
 
-## 3. `.workflow/workspace.json` 작성
+## 3. `.assistant/workspace.json` 작성
 
 `references/state-schema.md §3` 스키마 준수. 예시:
 
@@ -111,14 +111,14 @@ prerequisite 통과 후 사용자에게 묻는 것은 아래 4개이고, Notion 
 `harness.bootstrapped`/`checkedAt`은 §1.5 확인 결과로 채운다. `checkedAt`은 `TZ=Asia/Seoul date +%Y-%m-%d`.
 `design`은 §2 4번 답으로 채운다: `tool` ∈ {`figma`, `zeplin`, `null`}, `connected`는 best-effort 연결 감지 결과(state-schema §3). Notion·하네스와 달리 **하드 선행조건이 아니다** — 미연결/없음이어도 setup을 막지 않는다.
 
-이미 `.workflow/workspace.json`이 존재하면 갱신 모드 — 기존 값을 default로 보여주고 변경 항목만 수정.
+이미 `.assistant/workspace.json`이 존재하면 갱신 모드 — 기존 값을 default로 보여주고 변경 항목만 수정.
 
 ## 4. 종료 안내
 
 ```
 워크스페이스 설정 완료. 다음 단계:
   새 과제: /yeoboya-create-task <과제번호>
-  진행 중 과제 재개: /yeoboya-select-subtask
+  진행 중 과제 재개: /yeoboya-choose-subtask
 ```
 
 ## 5. Self-validation

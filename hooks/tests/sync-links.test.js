@@ -6,7 +6,7 @@ const os = require('node:os');
 const { spawnSync } = require('node:child_process');
 
 function tmpRoot() { return fs.mkdtempSync(path.join(os.tmpdir(), 'yb-sync-links-')); }
-function workFile(root, w) { return path.join(root, '.workflow', w, 'task.json'); }
+function workFile(root, w) { return path.join(root, '.assistant', w, 'task.json'); }
 
 function setupWork(root, w, workData) {
   const wf = workFile(root, w);

@@ -38,5 +38,5 @@ test('CLI html writes insights.html', () => {
     env: { ...process.env, DEV_ROOT: root }, encoding: 'utf8',
   });
   assert.equal(r.status, 0);
-  assert.ok(fs.existsSync(path.join(root, '.workflow', 'insights.html')));
+  assert.ok(fs.existsSync(path.join(root, '.assistant', 'insights.html')));
 });

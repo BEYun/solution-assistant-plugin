@@ -1,6 +1,6 @@
 ---
 name: yeoboya-fix-qa-bug
-description: "yeoboya-select-subtask이 이 세부작업을 trigger할 때, 즉 사용자가 QA 회귀를 발견했을 때만 사용한다. 직접 호출 금지. 완전히 새로운 사용자 보고 버그에는 절대 사용하지 말 것 — 그건 yeoboya-fix-bug다. 이것은 회귀 범위 과제다: 기존 write-code 결과 + QA 시나리오에 기반한 좁은 진단, 빠른 패치, 전체 RCA 없음. QA 사이클 동안 여러 번 호출될 수 있다."
+description: "yeoboya-choose-subtask이 이 세부작업을 trigger할 때, 즉 사용자가 QA 회귀를 발견했을 때만 사용한다. 직접 호출 금지. 완전히 새로운 사용자 보고 버그에는 절대 사용하지 말 것 — 그건 yeoboya-fix-bug다. 이것은 회귀 범위 과제다: 기존 write-code 결과 + QA 시나리오에 기반한 좁은 진단, 빠른 패치, 전체 RCA 없음. QA 사이클 동안 여러 번 호출될 수 있다."
 user-invocable: false
 ---
 
@@ -49,7 +49,7 @@ QA에서 발견된 사항을 알려주세요.
 QA 버그 수정 완료. (반복 호출 가능.)
 
 ```
-QA 버그 수정 완료. 더 발견된 사항이 있으면 /yeoboya-select-subtask에서 다시 QA 버그 수정을 선택하세요.
+QA 버그 수정 완료. 더 발견된 사항이 있으면 /yeoboya-choose-subtask에서 다시 QA 버그 수정을 선택하세요.
 없으면 과제 종결로 진행 가능.
-새 세션에서 /yeoboya-select-subtask을 호출하세요.
+새 세션에서 /yeoboya-choose-subtask을 호출하세요.
 ```

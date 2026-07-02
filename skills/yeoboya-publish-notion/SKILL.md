@@ -1,6 +1,6 @@
 ---
 name: yeoboya-publish-notion
-description: "yeoboya-workflow에서 Notion 페이지 쓰기나 과제 DB row 변경에 필수다. 세부작업 스킬에서 `notion-create-pages`나 `notion-update-page`를 직접 호출하지 말 것 — 먼저 이 스킬을 호출한다. work DB row upsert(dispatch), 워크스페이스 인지 속성 설정을 처리하고, `notion-page-record` hook이 pageId를 task.json.links에 기록하는 데 필요한 페이지 제목을 노출한다. 세부작업 스킬(write-policy, write-domain, draw-ui-flow, draw-data-flow, write-qa)이 산출물을 게시해야 할 때, 또는 create-work이 과제 DB row를 등록/동기화해야 할 때 사용한다."
+description: "yeoboya-assistant에서 Notion 페이지 쓰기나 과제 DB row 변경에 필수다. 세부작업 스킬에서 `notion-create-pages`나 `notion-update-page`를 직접 호출하지 말 것 — 먼저 이 스킬을 호출한다. work DB row upsert(dispatch), 워크스페이스 인지 속성 설정을 처리하고, `notion-page-record` hook이 pageId를 task.json.links에 기록하는 데 필요한 페이지 제목을 노출한다. 세부작업 스킬(write-policy, write-domain, draw-ui-flow, draw-data-flow, write-qa)이 산출물을 게시해야 할 때, 또는 create-work이 과제 DB row를 등록/동기화해야 할 때 사용한다."
 user-invocable: false
 ---
 

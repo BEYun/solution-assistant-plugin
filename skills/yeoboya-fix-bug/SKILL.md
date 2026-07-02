@@ -1,6 +1,6 @@
 ---
 name: yeoboya-fix-bug
-description: "yeoboya-select-subtask이 taskType=bugfix에 대해 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. QA에서 발견된 회귀에는 절대 사용하지 말 것 — 그건 yeoboya-fix-qa-bug다. 이 스킬은 사용자가 보고한 버그의 풀뎁스 진단(재현, 근본 원인 분석, 수정, 테스트)을 위한 것이다. 출력은 표준 패턴의 git 커밋이며, Notion 게시는 없다."
+description: "yeoboya-choose-subtask이 taskType=bugfix에 대해 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. QA에서 발견된 회귀에는 절대 사용하지 말 것 — 그건 yeoboya-fix-qa-bug다. 이 스킬은 사용자가 보고한 버그의 풀뎁스 진단(재현, 근본 원인 분석, 수정, 테스트)을 위한 것이다. 출력은 표준 패턴의 git 커밋이며, Notion 게시는 없다."
 user-invocable: false
 ---
 
@@ -41,9 +41,9 @@ user-invocable: false
 
 버그 수정+테스트가 끝나면 (커밋 직후):
 
-`.workflow/<과제번호>/task.json`을 Read → `codeWriteDone` 필드를 `true`로 설정 → Write.
+`.assistant/<과제번호>/task.json`을 Read → `codeWriteDone` 필드를 `true`로 설정 → Write.
 
-이 플래그가 `review-code` 진입 하드 선행조건이자 select-subtask 완료 마커(✓)의 근거다(state-schema §1). bugfix에는 Notion 산출물이 없는 코드 세부작업이므로 `links`에 키가 생기지 않아 이 플래그가 완료를 나타내는 유일한 수단이다.
+이 플래그가 `review-code` 진입 하드 선행조건이자 choose-subtask 완료 마커(✓)의 근거다(state-schema §1). bugfix에는 Notion 산출물이 없는 코드 세부작업이므로 `links`에 키가 생기지 않아 이 플래그가 완료를 나타내는 유일한 수단이다.
 
 ## 6. 종료 안내
 
@@ -51,5 +51,5 @@ user-invocable: false
 
 ```
 버그 수정 완료. 다음 권장 단계: 코드 리뷰.
-새 세션에서 /yeoboya-select-subtask을 호출하세요.
+새 세션에서 /yeoboya-choose-subtask을 호출하세요.
 ```

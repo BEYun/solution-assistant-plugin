@@ -1,6 +1,6 @@
 ---
 name: yeoboya-draw-data-flow
-description: "yeoboya-select-subtask이 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. UI 흐름도의 각 사용자 액션 ID마다 대응하는 데이터 흐름 액션(API 엔드포인트, Socket 이벤트, 또는 로컬 연산)을 정의한다. 엔드포인트는 /도메인명 규칙을 따른다. 모든 UI 액션 ID가 매핑되었는지 자체 검증한다. 'Notion 데이터 흐름도'를 게시한다."
+description: "yeoboya-choose-subtask이 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. UI 흐름도의 각 사용자 액션 ID마다 대응하는 데이터 흐름 액션(API 엔드포인트, Socket 이벤트, 또는 로컬 연산)을 정의한다. 엔드포인트는 /도메인명 규칙을 따른다. 모든 UI 액션 ID가 매핑되었는지 자체 검증한다. 'Notion 데이터 흐름도'를 게시한다."
 user-invocable: false
 ---
 
@@ -118,5 +118,5 @@ yeoboya-publish-notion 호출:
 
 ```
 데이터 흐름도 작성 완료. 다음 권장 단계: QA 시나리오.
-새 세션에서 /yeoboya-select-subtask을 호출하세요.
+새 세션에서 /yeoboya-choose-subtask을 호출하세요.
 ```

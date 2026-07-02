@@ -21,7 +21,7 @@ const { buildInsightsHtml } = require('./lib/insights-html');
   const nf = process.argv[3];
   if (nf) { try { narrative = fs.readFileSync(nf, 'utf8'); } catch {} }
 
-  const out = path.join(root, '.workflow', 'insights.html');
+  const out = path.join(root, '.assistant', 'insights.html');
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, buildInsightsHtml(data, narrative));
   process.stdout.write(out + '\n');

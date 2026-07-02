@@ -1,6 +1,6 @@
 ---
 name: yeoboya-edit-task
-description: "사용자가 /yeoboya-edit-task를 호출하거나, 과제 진행 중 정책·흐름·명세가 바뀌었다고 알릴 때('정책이 바뀌었어', '흐름도 수정됐어', '명세 변경됐어', '이 내용 반영해줘', '변경 전파') 사용한다. 진행 중인 과제(activeTask)에 대해 변경 내용을 받아 정책서~QA 시나리오 중 영향 범위를 판단해 사용자에게 검토받고, 영향 문서를 의존 순서로 기존 문서 스킬을 재사용해 갱신하며, 코드가 영향받으면 write-code 경유로 재작성을 위임한다. 세부작업이 아니며 select-subtask 흐름 밖의 독립 도구다. 변경이 문서 하나라도 건드릴 수 있으면 임의 판단으로 넘기지 말고 이 스킬을 사용한다."
+description: "사용자가 /yeoboya-edit-task를 호출하거나, 과제 진행 중 정책·흐름·명세가 바뀌었다고 알릴 때('정책이 바뀌었어', '흐름도 수정됐어', '명세 변경됐어', '이 내용 반영해줘', '변경 전파') 사용한다. 진행 중인 과제(activeTask)에 대해 변경 내용을 받아 정책서~QA 시나리오 중 영향 범위를 판단해 사용자에게 검토받고, 영향 문서를 의존 순서로 기존 문서 스킬을 재사용해 갱신하며, 코드가 영향받으면 write-code 경유로 재작성을 위임한다. 세부작업이 아니며 choose-subtask 흐름 밖의 독립 도구다. 변경이 문서 하나라도 건드릴 수 있으면 임의 판단으로 넘기지 말고 이 스킬을 사용한다."
 user-invocable: true
 ---
 
@@ -12,8 +12,8 @@ user-invocable: true
 
 ## 1. 전제 / 진입
 
-- `.workflow/workspace.json` 존재. `activeTask`로 대상 과제를 확정한다. 없거나 여러 과제 중
-  고를 필요가 있으면 `.workflow/`를 스캔해 사용자에게 고르게 한다(select-subtask §1 패턴).
+- `.assistant/workspace.json` 존재. `activeTask`로 대상 과제를 확정한다. 없거나 여러 과제 중
+  고를 필요가 있으면 `.assistant/`를 스캔해 사용자에게 고르게 한다(choose-subtask §1 패턴).
   과제가 하나도 없으면 안내 후 종료.
 - **진입 시 sync (필수 첫 동작)**: `yeoboya-publish-notion mode="sync-links"`(work=과제번호)를 1회
   호출해 과제 row 자식 페이지를 `task.json.links`에 동기화한다. 전파 판단이 **최신 문서 존재 상태**
@@ -88,7 +88,7 @@ echo '{"category":"spec-change","skill":"yeoboya-edit-task","workNo":"<과제번
 
 ## 6. 코드 재작성 (write-code 경유 + 델타 프레이밍)
 
-코드가 확정 범위에 있고 **코드 과제가 이미 착수됨**(`.workflow/<과제번호>/plan.md` 존재)일 때만 수행한다.
+코드가 확정 범위에 있고 **코드 과제가 이미 착수됨**(`.assistant/<과제번호>/plan.md` 존재)일 때만 수행한다.
 plan.md가 없으면(코드 미착수) 이 단계를 건너뛰고 "문서만 갱신됨 — 이후 코드 작성 시 갱신된 문서를
 반영한다"고 안내한다(코드 플래그 미변경).
 
@@ -97,7 +97,7 @@ plan.md가 없으면(코드 미착수) 이 단계를 건너뛰고 "문서만 갱
 
 ### 6.1 plan.md 수정 델타 재작성
 
-`.workflow/<과제번호>/plan.md`를 아래로 갈아끼운다(state-schema §2 고정 섹션 유지):
+`.assistant/<과제번호>/plan.md`를 아래로 갈아끼운다(state-schema §2 고정 섹션 유지):
 
 ```markdown
 ## 요구사항
@@ -125,7 +125,7 @@ plan.md가 없으면(코드 미착수) 이 단계를 건너뛰고 "문서만 갱
 
 ### 6.2 플래그 리셋
 
-`.workflow/<과제번호>/task.json`을 Read →
+`.assistant/<과제번호>/task.json`을 Read →
 - `codeWriteDone = false` (재작성 시작 — 완료 시 write-code가 다시 `true`로)
 - `codeReviewDone = false` (기존 리뷰가 무효화됨)
 - **`codeBaseSha`는 유지**(이 과제의 원본+델타 커밋이 하나의 리뷰/종결 단위)
@@ -153,11 +153,11 @@ plan.md가 없으면(코드 미착수) 이 단계를 건너뛰고 "문서만 갱
 변경 전파 완료.
 - 갱신 문서: <목록>
 - 코드 재작성: <write-code 위임함 / 미착수라 건너뜀 / 범위 아님>
-컨텍스트 정리를 위해 새 세션에서 /yeoboya-select-subtask을 호출하세요.
+컨텍스트 정리를 위해 새 세션에서 /yeoboya-choose-subtask을 호출하세요.
 ```
 
 코드 재작성이 도중 중단(harness-check 사람 게이트, bug-fix 한도 등)되면 write-code/work의 보고를
-그대로 전달하고, 재개는 `/yeoboya-select-subtask → 코드 작성`으로 안내한다.
+그대로 전달하고, 재개는 `/yeoboya-choose-subtask → 코드 작성`으로 안내한다.
 
 ## 원칙
 

@@ -1,6 +1,6 @@
 ---
 name: yeoboya-analyze-bug
-description: "yeoboya-select-subtask이 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. bugfix 과제에서 상류 기획/설계 산출물이 없으므로 사용자에게 버그 내용(증상·재현 절차·기대 동작)을 직접 묻고, 원인을 분석하며, 성공 기준(acceptance criteria)을 정의한 markdown을 작성한 뒤 자체 검증을 거쳐 title='버그 분석'으로 yeoboya-publish-notion을 호출한다. notion-page-record hook이 pageId를 task.json.links['analyze-bug']에 자동 기록한다."
+description: "yeoboya-choose-subtask이 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. bugfix 과제에서 상류 기획/설계 산출물이 없으므로 사용자에게 버그 내용(증상·재현 절차·기대 동작)을 직접 묻고, 원인을 분석하며, 성공 기준(acceptance criteria)을 정의한 markdown을 작성한 뒤 자체 검증을 거쳐 title='버그 분석'으로 yeoboya-publish-notion을 호출한다. notion-page-record hook이 pageId를 task.json.links['analyze-bug']에 자동 기록한다."
 user-invocable: false
 ---
 
@@ -10,7 +10,7 @@ user-invocable: false
 
 ## 1. 전제
 
-- task.json 존재. taskType=bugfix 가정 (select-subtask이 bugfix 뷰의 `진단` 그룹에서만 노출).
+- task.json 존재. taskType=bugfix 가정 (choose-subtask이 bugfix 뷰의 `진단` 그룹에서만 노출).
 - **진입 시 sync (필수 첫 동작)**: `yeoboya-publish-notion mode="sync-links"`(work=과제번호)를 1회 호출해 과제 row 자식 페이지를 `task.json.links`에 동기화한다 — 본 산출물이 이미 있으면 publish가 update가 되어 중복 페이지 방지.
 
 ## 2. 입력 수집 (사용자에게 직접 질의)
@@ -77,5 +77,5 @@ title은 전달하지 않는다 — publish-notion이 `KEY_TO_TITLE["analyze-bug
 
 ```
 버그 분석 완료. 다음 권장 단계: QA 시나리오.
-컨텍스트 정리를 위해 새 세션에서 /yeoboya-select-subtask을 호출하세요.
+컨텍스트 정리를 위해 새 세션에서 /yeoboya-choose-subtask을 호출하세요.
 ```

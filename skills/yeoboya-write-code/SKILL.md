@@ -36,6 +36,22 @@ user-invocable: false
 - `work.json`의 `workType`·`name`, `workspace.json`의 `platform` 확인.
 - 하네스 문서를 읽어 계획의 제약으로 삼는다(현재 repo = git root 기준): `docs/ARCHITECTURE.md`, `docs/CONVENTIONS.md`, 관련 모듈 `CLAUDE.md`.
 
+### 3.1a 디자인/API 링크 수집 → fetch → 요약 (첫 호출만, 항상 물음·스킵 가능)
+
+`.workflow/workspace.json`의 `design.tool`을 읽는다. **재개(§4)에서는 이 단계 전체를 생략**한다. 사용자 요청("실행 전 링크를 받는 방식")에 따라 첫 호출 시 항상 묻되, 답이 없으면(스킵) 아무 것도 주입하지 않고 진행한다.
+
+1. **디자인 링크** — `design.tool ∈ {figma, zeplin}`이면 묻는다: *"참고할 <Figma/Zeplin> 디자인 링크가 있나요? (없으면 스킵)"*. `tool=null`이면 이 물음을 생략한다.
+   - **Figma + 연결됨** → `get_design_context`(레이아웃·컴포넌트 구조) + `get_variable_defs`(디자인 토큰: 색/타이포/간격) 호출, 필요 시 `get_screenshot`(링크만 기록). 반환을 **요약**한다(전체 덤프 금지) — 화면/컴포넌트 목록, 토큰 요약. 결과를 `## 디자인 참조`로 정리.
+   - **Zeplin** → 동일 분기 골격이나 현재 미연결이라 정확한 도구명 미확정 — 연결 후 채운다. 연결 전에는 링크만 `## 디자인 참조`에 기록.
+   - **툴 지정됐으나 MCP 호출 실패(미연결)** → 소프트 경고("<툴> MCP가 연결돼 있지 않아 디자인을 자동으로 읽지 못했습니다. 링크만 plan.md에 남깁니다.") 후 링크만 남기고 계속(차단 아님).
+   - 코드 변환(figma-swiftui/Compose 등)은 **하지 않는다** — 컨텍스트 주입만. 플랫폼(iOS/Android)은 요약에 병기만.
+2. **Swagger URL** — 묻는다: *"이 작업이 호출하는 Swagger 스펙 URL이 있나요? (없으면 스킵)"*. 작업마다 입력.
+   - **있음** → Bash로 실행: `node ${CLAUDE_PLUGIN_ROOT}/hooks/lib/swagger-extract.js "<URL>" [엔드포인트필터…]`. 스펙이 크면 관심 엔드포인트를 물어 필터 인자로 넘긴다. 반환 markdown을 `## API 참조`로 주입한다. **WebFetch 금지 — 사내망은 curl(이 헬퍼)로만 닿는다.**
+   - **curl 실패(접근 불가·인증)** → 헬퍼 stderr를 사용자에게 전달하고 URL만 `## API 참조`에 남긴다(소프트).
+3. **둘 다 스킵** → 선택 섹션 없이 기존 흐름을 계속한다(디자인/API 없는 작업).
+
+이 단계에서 받은 컨텍스트는 §3.3 plan.md의 **선택 섹션**(state-schema §2)과 파생 완료기준으로 들어간다.
+
 ### 3.2 Brainstorming (계획 수립)
 
 superpowers:brainstorming으로 이 작업의 **코드 작업 계획**을 수립한다(아키텍처 접근, 다룰 모듈, 완료기준). phase 분해가 아니라 **work에 넘길 계획서**가 산출물이다. 사용자와 계획을 확인한 뒤 확정한다.
@@ -67,6 +83,10 @@ superpowers:brainstorming으로 이 작업의 **코드 작업 계획**을 수립
 ```
 
 ⚠️ `## 완료기준`은 반드시 `- [ ]` 체크리스트로 쓴다(하네스 `require-completion-criteria` 훅이 체크박스 없는 run 파일 쓰기를 차단하므로, work이 이 체크리스트를 run 파일로 옮겨 쓸 수 있어야 한다).
+
+**선택 섹션 (§3.1a에서 링크를 받았을 때만)**: 고정 5개 섹션 뒤에 `## 디자인 참조`·`## API 참조`(state-schema §2)를 추가한다. 동시에 대응 **완료기준을 파생**해 `## 완료기준`에 자동 추가하되 사용자에게 보여주고 확정한다:
+- 디자인 있음 → `- [ ] 화면이 <디자인툴> 스펙(레이아웃·토큰)과 일치`
+- Swagger 있음 → `- [ ] API 호출이 Swagger 스키마(엔드포인트·요청/응답 DTO)와 일치`
 
 ### 3.4 codeBaseSha 기록
 
@@ -127,3 +147,4 @@ work 호출 전 검증:
 - [ ] `plan.md`에 5개 고정 섹션(요구사항/참고 코드/완료기준/플랫폼/커밋 규약) 존재, 완료기준이 `- [ ]` 체크리스트
 - [ ] `work.json.codeBaseSha`가 기록됨(첫 호출 시) 또는 보존됨(재개 시)
 - [ ] 플랫폼 값이 `workspace.platform`과 일치
+- [ ] §3.1a에서 링크를 받았으면 대응 선택 섹션(`## 디자인 참조`/`## API 참조`)이 plan.md에 존재하고 완료기준이 파생됨(스킵했으면 해당 없음)

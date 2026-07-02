@@ -36,5 +36,9 @@
   },
   "VERSIONED_TITLE_PREFIXES": {
     "write-policy-feedback": "기획서 검토"
+  },
+  "DESIGN_TOOLS": {
+    "figma":  { "label": "Figma",  "detectToolSuffixes": ["get_design_context", "get_variable_defs"] },
+    "zeplin": { "label": "Zeplin", "detectToolSuffixes": [] }
   }
 }

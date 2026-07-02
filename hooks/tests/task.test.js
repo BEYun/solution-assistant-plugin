@@ -4,33 +4,33 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 
-const work = require('../lib/work');
+const work = require('../lib/task');
 
 function tmpRoot() { return fs.mkdtempSync(path.join(os.tmpdir(), 'yb-work-')); }
 function workspaceFile(root) { return path.join(root, '.workflow', 'workspace.json'); }
-function workFile(root, w) { return path.join(root, '.workflow', w, 'work.json'); }
+function workFile(root, w) { return path.join(root, '.workflow', w, 'task.json'); }
 
-test('readActiveWork returns null when workspace.json absent', () => {
-  assert.equal(work.readActiveWork(tmpRoot()), null);
+test('readActiveTask returns null when workspace.json absent', () => {
+  assert.equal(work.readActiveTask(tmpRoot()), null);
 });
 
-test('readActiveWork returns activeWork value', () => {
+test('readActiveTask returns activeTask value', () => {
   const root = tmpRoot();
   fs.mkdirSync(path.dirname(workspaceFile(root)), { recursive: true });
-  fs.writeFileSync(workspaceFile(root), JSON.stringify({ activeWork: 'DCL-1234' }));
-  assert.equal(work.readActiveWork(root), 'DCL-1234');
+  fs.writeFileSync(workspaceFile(root), JSON.stringify({ activeTask: 'DCL-1234' }));
+  assert.equal(work.readActiveTask(root), 'DCL-1234');
 });
 
-test('readWork returns null when work.json absent', () => {
-  assert.equal(work.readWork(tmpRoot(), 'DCL-X'), null);
+test('readTask returns null when task.json absent', () => {
+  assert.equal(work.readTask(tmpRoot(), 'DCL-X'), null);
 });
 
-test('readWork parses work.json', () => {
+test('readTask parses task.json', () => {
   const root = tmpRoot();
   const f = workFile(root, 'DCL-1234');
   fs.mkdirSync(path.dirname(f), { recursive: true });
   fs.writeFileSync(f, JSON.stringify({ work: 'DCL-1234', links: {} }));
-  assert.equal(work.readWork(root, 'DCL-1234').work, 'DCL-1234');
+  assert.equal(work.readTask(root, 'DCL-1234').work, 'DCL-1234');
 });
 
 test('recordLink writes single pageId into links[key]', () => {
@@ -43,7 +43,7 @@ test('recordLink writes single pageId into links[key]', () => {
   assert.equal(after.links['write-policy'], 'p-1');
 });
 
-test('recordLink returns false when work.json absent', () => {
+test('recordLink returns false when task.json absent', () => {
   assert.equal(work.recordLink(tmpRoot(), 'DCL-X', 'write-policy', 'p-1'), false);
 });
 
@@ -137,7 +137,7 @@ test('syncLinks preserves unmatched existing keys and skips unknown titles', () 
   assert.equal(links['엉뚱한 제목'], undefined);
 });
 
-test('syncLinks returns null when work.json absent', () => {
+test('syncLinks returns null when task.json absent', () => {
   assert.equal(work.syncLinks(tmpRoot(), 'DCL-X', [{ title: '정책서', id: 'p' }]), null);
 });
 

@@ -22,26 +22,26 @@ test('emits empty stdout (silent) when no activeTask', () => {
   assert.equal(result.stdout.trim(), '');
 });
 
-test('emits resume block with work + taskType + select-subtask when task.json exists', () => {
+test('emits resume block with work + taskType + choose-subtask when task.json exists', () => {
   const root = tmpRoot();
-  const ws = path.join(root, '.workflow', 'workspace.json');
+  const ws = path.join(root, '.assistant', 'workspace.json');
   fs.mkdirSync(path.dirname(ws), { recursive: true });
   fs.writeFileSync(ws, JSON.stringify({ activeTask: 'DCL-1234' }));
-  const wf = path.join(root, '.workflow', 'DCL-1234', 'task.json');
+  const wf = path.join(root, '.assistant', 'DCL-1234', 'task.json');
   fs.mkdirSync(path.dirname(wf), { recursive: true });
   fs.writeFileSync(wf, JSON.stringify({ work: 'DCL-1234', taskType: 'feature', links: { 'write-policy': 'p-1' } }));
   const result = runHook(root);
   assert.equal(result.status, 0);
   const ctx = JSON.parse(result.stdout).hookSpecificOutput.additionalContext;
-  assert.match(ctx, /<yeoboya-workflow-resume>/);
+  assert.match(ctx, /<yeoboya-assistant-resume>/);
   assert.match(ctx, /DCL-1234/);
   assert.match(ctx, /feature/);
-  assert.match(ctx, /\/yeoboya-select-subtask/);
+  assert.match(ctx, /\/yeoboya-choose-subtask/);
 });
 
 test('emits create-task guidance when activeTask present but no task.json', () => {
   const root = tmpRoot();
-  const ws = path.join(root, '.workflow', 'workspace.json');
+  const ws = path.join(root, '.assistant', 'workspace.json');
   fs.mkdirSync(path.dirname(ws), { recursive: true });
   fs.writeFileSync(ws, JSON.stringify({ activeTask: 'DCL-9999' }));
   const result = runHook(root);

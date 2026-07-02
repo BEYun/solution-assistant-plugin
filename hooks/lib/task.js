@@ -5,11 +5,11 @@ const path = require('node:path');
 const { resolveKey, isMultiPageKey } = require('./notion');
 
 function workspacePath(root) {
-  return path.join(root, '.workflow', 'workspace.json');
+  return path.join(root, '.assistant', 'workspace.json');
 }
 
 function taskPath(root, task) {
-  return path.join(root, '.workflow', task, 'task.json');
+  return path.join(root, '.assistant', task, 'task.json');
 }
 
 function ensureDir(p) {

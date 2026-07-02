@@ -1,6 +1,6 @@
 ---
 name: yeoboya-write-qa
-description: "yeoboya-select-subtask이 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. 이전 산출물(UI 흐름도, 데이터 흐름도, write-code 커밋)로부터 QA 시나리오를 도출해 'QA 시나리오' Notion 데이터베이스(테이블)로 게시한다. 각 행은 하나의 테스트 케이스(속성: 케이스 ID·페르소나·카테고리·시나리오·관련 API / Socket·iOS 결과·Android 결과·Web 결과)이고, 행 본문에 사전 조건·테스트 단계·기대 결과를 정의한다. 케이스 ID는 페르소나→카테고리 순으로 부여해 ID 오름차순 정렬 시 페르소나·카테고리별로 묶이게 한다."
+description: "yeoboya-choose-subtask이 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. 이전 산출물(UI 흐름도, 데이터 흐름도, write-code 커밋)로부터 QA 시나리오를 도출해 'QA 시나리오' Notion 데이터베이스(테이블)로 게시한다. 각 행은 하나의 테스트 케이스(속성: 케이스 ID·페르소나·카테고리·시나리오·관련 API / Socket·iOS 결과·Android 결과·Web 결과)이고, 행 본문에 사전 조건·테스트 단계·기대 결과를 정의한다. 케이스 ID는 페르소나→카테고리 순으로 부여해 ID 오름차순 정렬 시 페르소나·카테고리별로 묶이게 한다."
 user-invocable: false
 ---
 
@@ -117,7 +117,7 @@ publish-notion이 신규면 DB 생성+행 추가 후 `sync-links`로 `links['wri
 
 ```
 QA 시나리오 작성 완료. 다음 권장 단계: <다음 단계>.
-새 세션에서 /yeoboya-select-subtask을 호출하세요.
+새 세션에서 /yeoboya-choose-subtask을 호출하세요.
 ```
 
 `<다음 단계>`는 taskType별로 채운다 (SUBTASK_GROUPS상 write-qa 다음 = "개발" 그룹): feature → "코드 작성", update → "코드 수정", bugfix → "버그 수정".

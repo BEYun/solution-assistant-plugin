@@ -1,6 +1,6 @@
 ---
 name: yeoboya-write-code
-description: "yeoboya-select-subtask이 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. 선행 Notion 산출물(정책서/도메인/데이터 흐름도)과 하네스 문서를 읽어 .workflow/<과제번호>/plan.md(코드 과제 계획서)를 작성하고, task.json.codeBaseSha를 기록한 뒤, 하네스 플러그인의 work 닫힌 루프에 구현을 위임한다. phase 시스템은 더 이상 쓰지 않는다. yeoboya-publish-notion을 호출하지 않는다."
+description: "yeoboya-choose-subtask이 이 세부작업을 trigger할 때만 사용한다. 직접 호출 금지. 선행 Notion 산출물(정책서/도메인/데이터 흐름도)과 하네스 문서를 읽어 .assistant/<과제번호>/plan.md(코드 과제 계획서)를 작성하고, task.json.codeBaseSha를 기록한 뒤, 하네스 플러그인의 work 닫힌 루프에 구현을 위임한다. phase 시스템은 더 이상 쓰지 않는다. yeoboya-publish-notion을 호출하지 않는다."
 user-invocable: false
 ---
 
@@ -12,16 +12,16 @@ user-invocable: false
 ## 1. 전제
 
 - task.json 존재.
-- select-subtask이 **write-code 진입 게이트(select-subtask §6)**를 이미 통과: sync-links로 `task.json.links`가 최신화되었고, **feature는 정책서·UI 흐름도·데이터 흐름도 3종이 links에 존재함이 보장된다(하드 선행조건)**. update/bugfix는 일부가 없을 수 있다.
-- **하네스 부트스트랩 가정**: `.workflow/workspace.json`의 `harness.bootstrapped`를 읽는다(repo 스캔 아님 — 플래그 1회 읽기). `true`가 아니면 아래 안내 후 **즉시 종료**(work을 호출하지 않는다):
+- choose-subtask이 **write-code 진입 게이트(choose-subtask §6)**를 이미 통과: sync-links로 `task.json.links`가 최신화되었고, **feature는 정책서·UI 흐름도·데이터 흐름도 3종이 links에 존재함이 보장된다(하드 선행조건)**. update/bugfix는 일부가 없을 수 있다.
+- **하네스 부트스트랩 가정**: `.assistant/workspace.json`의 `harness.bootstrapped`를 읽는다(repo 스캔 아님 — 플래그 1회 읽기). `true`가 아니면 아래 안내 후 **즉시 종료**(work을 호출하지 않는다):
   ```
   이 repo는 하네스 부트스트랩이 확인되지 않았습니다(harness.bootstrapped ≠ true).
-  /harness-root 실행(leaf 모듈이 있으면 이어서 /harness-module) 후 /yeoboya-setup-workspace를 다시 호출해 부트스트랩을 확정한 뒤 진행하세요.
+  /harness-root 실행(leaf 모듈이 있으면 이어서 /harness-module) 후 /yeoboya-setup을 다시 호출해 부트스트랩을 확정한 뒤 진행하세요.
   ```
 
 ## 2. 첫 호출 vs 재개 분기
 
-`.workflow/<과제번호>/plan.md` 존재 여부로 분기:
+`.assistant/<과제번호>/plan.md` 존재 여부로 분기:
 
 | 상태 | 분기 |
 |---|---|
@@ -38,7 +38,7 @@ user-invocable: false
 
 ### 3.1a 디자인/API 링크 수집 → fetch → 요약 (첫 호출만, 항상 물음·스킵 가능)
 
-`.workflow/workspace.json`의 `design.tool`을 읽는다. **재개(§4)에서는 이 단계 전체를 생략**한다. 사용자 요청("실행 전 링크를 받는 방식")에 따라 첫 호출 시 항상 묻되, 답이 없으면(스킵) 아무 것도 주입하지 않고 진행한다.
+`.assistant/workspace.json`의 `design.tool`을 읽는다. **재개(§4)에서는 이 단계 전체를 생략**한다. 사용자 요청("실행 전 링크를 받는 방식")에 따라 첫 호출 시 항상 묻되, 답이 없으면(스킵) 아무 것도 주입하지 않고 진행한다.
 
 1. **디자인 링크** — `design.tool ∈ {figma, zeplin}`이면 묻는다: *"참고할 <Figma/Zeplin> 디자인 링크가 있나요? (없으면 스킵)"*. `tool=null`이면 이 물음을 생략한다.
    - **Figma + 연결됨** → `get_design_context`(레이아웃·컴포넌트 구조) + `get_variable_defs`(디자인 토큰: 색/타이포/간격) 호출, 필요 시 `get_screenshot`(링크만 기록). 반환을 **요약**한다(전체 덤프 금지) — 화면/컴포넌트 목록, 토큰 요약. 결과를 `## 디자인 참조`로 정리.
@@ -60,7 +60,7 @@ superpowers:brainstorming으로 이 과제의 **코드 과제 계획**을 수립
 
 ### 3.3 plan.md 작성
 
-`.workflow/<과제번호>/plan.md`를 아래 고정 섹션으로 작성한다(state-schema.md §2 준수):
+`.assistant/<과제번호>/plan.md`를 아래 고정 섹션으로 작성한다(state-schema.md §2 준수):
 
 ```markdown
 ## 요구사항
@@ -96,7 +96,7 @@ work 호출 직전, 코드 과제 시작 SHA를 task.json에 1회 기록한다:
 git rev-parse HEAD 2>/dev/null   # 출력이 없으면(커밋 없는 repo) codeBaseSha = null
 ```
 
-`.workflow/<과제번호>/task.json`을 Read → `codeBaseSha` 필드를 위 SHA(또는 null)로 설정 → Write. **`codeBaseSha` 필드가 이미 존재하면(`null` 포함) 덮어쓰지 않는다.**
+`.assistant/<과제번호>/task.json`을 Read → `codeBaseSha` 필드를 위 SHA(또는 null)로 설정 → Write. **`codeBaseSha` 필드가 이미 존재하면(`null` 포함) 덮어쓰지 않는다.**
 
 ### 3.5 work 호출
 
@@ -104,7 +104,7 @@ Skill 도구로 하네스 `work` 스킬을 호출하고, plan.md를 입력으로
 
 ```
 work 호출:
-  요구 사항: "@.workflow/<과제번호>/plan.md 를 읽고 구현. 계획 문서이므로 plan-reviewer(7축)를 거친다."
+  요구 사항: "@.assistant/<과제번호>/plan.md 를 읽고 구현. 계획 문서이므로 plan-reviewer(7축)를 거친다."
   완료 기준: plan.md의 ## 완료기준 체크리스트
   플랫폼:    plan.md의 ## 플랫폼 (완료기준 명령 번역용)
   커밋 규약: plan.md의 ## 커밋 규약 — 모든 커밋에 [<과제번호>] prefix
@@ -124,9 +124,9 @@ work이 계획 검토(plan-reviewer) → TDD → 통합/E2E 작성 → 완료기
 
 work이 **모든 완료기준 통과**를 보고했을 때에만:
 
-`.workflow/<과제번호>/task.json`을 Read → `codeWriteDone` 필드를 `true`로 설정 → Write.
+`.assistant/<과제번호>/task.json`을 Read → `codeWriteDone` 필드를 `true`로 설정 → Write.
 
-이 플래그가 `review-code` 진입 하드 선행조건이자 select-subtask 완료 마커(✓)의 근거다(state-schema §1). work이 도중 중단(harness-check 사람 게이트, bug-fix 한도 등)된 경우에는 **기록하지 않는다**(미완료 유지 — 재개로 이어진다).
+이 플래그가 `review-code` 진입 하드 선행조건이자 choose-subtask 완료 마커(✓)의 근거다(state-schema §1). work이 도중 중단(harness-check 사람 게이트, bug-fix 한도 등)된 경우에는 **기록하지 않는다**(미완료 유지 — 재개로 이어진다).
 
 ### 5.2 종료 안내
 
@@ -135,10 +135,10 @@ work이 완료를 보고하면:
 ```
 코드 과제 완료 (work 닫힌 루프 종료).
 다음 권장 단계: 코드 리뷰.
-새 세션에서 /yeoboya-select-subtask을 호출하세요.
+새 세션에서 /yeoboya-choose-subtask을 호출하세요.
 ```
 
-work이 도중 중단(harness-check 사람 게이트, bug-fix 한도 등)되면 work의 보고를 그대로 사용자에게 전달하고(`codeWriteDone` 미기록), 재개는 `/yeoboya-select-subtask → write-code`(§4)로 안내한다.
+work이 도중 중단(harness-check 사람 게이트, bug-fix 한도 등)되면 work의 보고를 그대로 사용자에게 전달하고(`codeWriteDone` 미기록), 재개는 `/yeoboya-choose-subtask → write-code`(§4)로 안내한다.
 
 ## 6. Self-validation
 

@@ -1,16 +1,16 @@
 ---
-name: yeoboya-select-subtask
-description: "사용자가 /yeoboya-select-subtask을 호출하거나, 세부작업 목록을 열거나 과제를 진행하려는 의도를 표현할 때('과제 진행', '세부작업 목록', '다음 세부작업') 사용한다. .workflow/에서 과제(각각 task.json을 가짐)를 스캔하고, 사용자가 하나를 고르게 하며(activeTask는 [현재]로 표시), 추천 없이 taskType별로 다르게 구성된 세부작업 목록(그룹별)을 보여준 뒤 Skill 도구로 선택된 yeoboya-<key> 스킬을 trigger한다. 구현에 착수하기 전 진입 게이트(write-code: sync-links + 필수 문서 검사 — taskType=feature는 정책서/UI 흐름도/데이터 흐름도가 없으면 하드 블록; bugfix write-qa는 버그 분석이 없으면 소프트 경고)를 포함한다."
+name: yeoboya-choose-subtask
+description: "사용자가 /yeoboya-choose-subtask을 호출하거나, 세부작업 목록을 열거나 과제를 진행하려는 의도를 표현할 때('과제 진행', '세부작업 목록', '다음 세부작업') 사용한다. .assistant/에서 과제(각각 task.json을 가짐)를 스캔하고, 사용자가 하나를 고르게 하며(activeTask는 [현재]로 표시), 추천 없이 taskType별로 다르게 구성된 세부작업 목록(그룹별)을 보여준 뒤 Skill 도구로 선택된 yeoboya-<key> 스킬을 trigger한다. 구현에 착수하기 전 진입 게이트(write-code: sync-links + 필수 문서 검사 — taskType=feature는 정책서/UI 흐름도/데이터 흐름도가 없으면 하드 블록; bugfix write-qa는 버그 분석이 없으면 소프트 경고)를 포함한다."
 user-invocable: true
 ---
 
-# yeoboya-select-subtask
+# yeoboya-choose-subtask
 
 과제 선택 + 전체 세부작업 목록 표시 + Skill 도구로 trigger.
 
 ## 1. 과제 목록 스캔
 
-`.workflow/` 디렉토리를 스캔하여 `task.json`이 있는 모든 과제 폴더를 수집:
+`.assistant/` 디렉토리를 스캔하여 `task.json`이 있는 모든 과제 폴더를 수집:
 
 ```
 진행 중 과제 목록:
@@ -185,7 +185,7 @@ Skill 도구로 해당 `yeoboya-<key>` skill 호출. 전달 컨텍스트:
 
 ## 8. 세부작업 완료 후 종료
 
-trigger된 skill이 완료 안내를 출력하면 본 skill은 **반복하지 않고 즉시 종료**. 사용자는 새 세션에서 `/yeoboya-select-subtask`를 다시 호출.
+trigger된 skill이 완료 안내를 출력하면 본 skill은 **반복하지 않고 즉시 종료**. 사용자는 새 세션에서 `/yeoboya-choose-subtask`을 다시 호출.
 
 ## 9. Self-validation
 

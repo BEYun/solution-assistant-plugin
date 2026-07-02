@@ -16,7 +16,7 @@ function silent() {
 }
 
 function buildResumeBlock({ work, data }) {
-  const lines = ['<yeoboya-workflow-resume>'];
+  const lines = ['<yeoboya-assistant-resume>'];
   lines.push(`진행 중 작업이 감지되었습니다: **${work}**`);
   if (!data) {
     lines.push('상태: workspace.json에 activeTask는 있으나 task.json 미생성.');
@@ -24,9 +24,9 @@ function buildResumeBlock({ work, data }) {
   } else {
     lines.push(`taskType: ${data.taskType ?? '미지정'}`);
     lines.push('');
-    lines.push('세부작업 목록을 열려면 `/yeoboya-select-subtask`을 호출하세요.');
+    lines.push('세부작업 목록을 열려면 `/yeoboya-choose-subtask`을 호출하세요.');
   }
-  lines.push('</yeoboya-workflow-resume>');
+  lines.push('</yeoboya-assistant-resume>');
   return lines.join('\n');
 }
 

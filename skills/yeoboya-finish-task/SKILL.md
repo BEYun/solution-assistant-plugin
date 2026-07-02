@@ -66,11 +66,11 @@ yeoboya-publish-notion 호출:
     Android_완료: true   # workspace.platform === "Android"일 때만 포함
 ```
 
-두 boolean 모두 본인 플랫폼만 토글한다. 다른 플랫폼의 boolean은 건드리지 않는다 — 다른 플랫폼 과제자가 자기 finish-work에서 자기 boolean을 켤 책임.
+두 boolean 모두 본인 플랫폼만 토글한다. 다른 플랫폼의 boolean은 건드리지 않는다 — 다른 플랫폼 작업자가 자기 finish-work에서 자기 boolean을 켤 책임.
 
 ## 5. 종결 보고 출력
 
-코드 과제은 `task.json.codeBaseSha..HEAD` range 커밋으로 요약한다(phase 개념 없음):
+코드 과제는 `task.json.codeBaseSha..HEAD` range 커밋으로 요약한다(phase 개념 없음):
 
 ```bash
 BASE=$(jq -r '.codeBaseSha // empty' .workflow/<과제번호>/task.json)

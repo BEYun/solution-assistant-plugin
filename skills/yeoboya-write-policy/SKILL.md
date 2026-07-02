@@ -12,7 +12,7 @@ user-invocable: false
 
 - task.json 존재.
 - 기획서 검토 산출물(task.json.links['write-policy-feedback'])이 있으면 입력으로 활용한다. 없으면 사용자에게 알리고 계속 진행할지 확인한다 (강제 종료 없음).
-- **진입 시 sync (필수 첫 동작)**: `yeoboya-publish-notion mode="sync-links"`(work=과제번호)를 1회 호출해 과제 row 자식 페이지를 `task.json.links`에 동기화한다 — (a) 다른 과제자가 만든 선행 문서를 links에서 인식, (b) 본 산출물이 이미 있으면 publish가 update가 되어 중복 페이지 방지.
+- **진입 시 sync (필수 첫 동작)**: `yeoboya-publish-notion mode="sync-links"`(work=과제번호)를 1회 호출해 과제 row 자식 페이지를 `task.json.links`에 동기화한다 — (a) 다른 작업자가 만든 선행 문서를 links에서 인식, (b) 본 산출물이 이미 있으면 publish가 update가 되어 중복 페이지 방지.
 
 ## 2. 입력 fetch
 
@@ -34,7 +34,7 @@ user-invocable: false
 ## 4. Self-validation (publish 직전)
 
 - [ ] 페이지 제목 = "정책서" (hook 매핑용)
-- [ ] 메타 (업로드 일시 + 과제자 + 이전 버전) 명시
+- [ ] 메타 (업로드 일시 + 작업자 + 이전 버전) 명시
 - [ ] §용어 표 1행 이상
 - [ ] §페르소나 표 1행 이상
 - [ ] §파라미터 표 1행 이상 (해당 없으면 "해당 없음" 명시)

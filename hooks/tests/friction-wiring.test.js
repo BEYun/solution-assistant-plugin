@@ -19,7 +19,7 @@ test('sync-links no-work-json records a schema-mismatch friction', () => {
   assert.equal(r.status, 0);
   const events = readFrictionLog(root);
   assert.equal(events.length, 1);
-  assert.equal(events[0].skill, 'yeoboya-publish-notion');
+  assert.equal(events[0].skill, 'solution-publish-notion');
   assert.equal(events[0].category, 'schema-mismatch');
 });
 

@@ -9,7 +9,7 @@ function tmpRoot() { return fs.mkdtempSync(path.join(os.tmpdir(), 'yb-friction-'
 
 test('logFriction appends a normalized line and arms recovery', () => {
   const root = tmpRoot();
-  const ok = logFriction(root, { skill: 'yeoboya-write-code', category: 'gate-block', severity: 'blocker', what: '데이터 흐름도 없음', source: 'hook' });
+  const ok = logFriction(root, { skill: 'solution-write-code', category: 'gate-block', severity: 'blocker', what: '데이터 흐름도 없음', source: 'hook' });
   assert.equal(ok, true);
   const lines = readFrictionLog(root);
   assert.equal(lines.length, 1);
@@ -36,7 +36,7 @@ test('invalid category/severity fall back to safe defaults', () => {
 
 test('spec-change is a valid category (edit-work 변경 전파 기록)', () => {
   const root = tmpRoot();
-  logFriction(root, { category: 'spec-change', skill: 'yeoboya-edit-task', what: '검색 필터에 지역 조건 추가', source: 'agent' });
+  logFriction(root, { category: 'spec-change', skill: 'solution-edit-task', what: '검색 필터에 지역 조건 추가', source: 'agent' });
   const [e] = readFrictionLog(root);
   assert.equal(e.category, 'spec-change');
   assert.equal(e.source, 'agent');

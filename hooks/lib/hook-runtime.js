@@ -26,7 +26,7 @@ function log(event) {
     const dir = process.env.DEV_LOG_DIR || path.join(os.homedir(), '.claude', 'logs');
     fs.mkdirSync(dir, { recursive: true });
     const line = JSON.stringify({ ts: new Date().toISOString(), ...event }) + '\n';
-    fs.appendFileSync(path.join(dir, 'yeoboya-hooks.log'), line);
+    fs.appendFileSync(path.join(dir, 'solution-hooks.log'), line);
   } catch {
     // Logging must never break a hook.
   }

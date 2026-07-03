@@ -7,10 +7,10 @@ const path = require('node:path');
 
 const ROOT = path.join(__dirname, '..', '..');
 const TEMPLATES = [
-  'skills/yeoboya-write-policy/references/policy-template.md',
-  'skills/yeoboya-write-domain/references/domain-template.md',
-  'skills/yeoboya-draw-ui-flow/references/ui-flow-template.md',
-  'skills/yeoboya-draw-data-flow/references/data-flow-template.md',
+  'skills/solution-write-policy/references/policy-template.md',
+  'skills/solution-write-domain/references/domain-template.md',
+  'skills/solution-draw-ui-flow/references/ui-flow-template.md',
+  'skills/solution-draw-data-flow/references/data-flow-template.md',
 ];
 
 for (const rel of TEMPLATES) {

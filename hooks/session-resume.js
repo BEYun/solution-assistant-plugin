@@ -16,17 +16,17 @@ function silent() {
 }
 
 function buildResumeBlock({ work, data }) {
-  const lines = ['<yeoboya-assistant-resume>'];
+  const lines = ['<solution-assistant-resume>'];
   lines.push(`진행 중 작업이 감지되었습니다: **${work}**`);
   if (!data) {
     lines.push('상태: workspace.json에 activeTask는 있으나 task.json 미생성.');
-    lines.push('새 작업 생성이 필요합니다 — `/yeoboya-create-task <작업번호>`를 호출하세요.');
+    lines.push('새 작업 생성이 필요합니다 — `/solution-create-task <작업번호>`를 호출하세요.');
   } else {
     lines.push(`taskType: ${data.taskType ?? '미지정'}`);
     lines.push('');
-    lines.push('세부작업 목록을 열려면 `/yeoboya-choose-subtask`을 호출하세요.');
+    lines.push('세부작업 목록을 열려면 `/solution-choose-subtask`을 호출하세요.');
   }
-  lines.push('</yeoboya-assistant-resume>');
+  lines.push('</solution-assistant-resume>');
   return lines.join('\n');
 }
 

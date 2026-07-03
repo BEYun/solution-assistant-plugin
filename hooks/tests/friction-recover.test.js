@@ -22,7 +22,7 @@ test('no marker -> passes silently (exit 0)', () => {
 
 test('pending marker -> blocks once with prompt, then clears marker', () => {
   const root = tmpRoot();
-  logFriction(root, { category: 'gate-block', skill: 'yeoboya-choose-subtask', what: 'x', source: 'hook' });
+  logFriction(root, { category: 'gate-block', skill: 'solution-choose-subtask', what: 'x', source: 'hook' });
   assert.equal(hasPendingRecovery(root), true);
   const r = run(root, {});
   assert.equal(r.status, 2);

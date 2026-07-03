@@ -10,7 +10,7 @@ test('log appends one JSON line with timestamp + fields', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'yb-hook-log-'));
   process.env.DEV_LOG_DIR = dir;
   rt.log({ hook: 'page-record', event: 'capture', stage: 'write-policy' });
-  const file = path.join(dir, 'yeoboya-hooks.log');
+  const file = path.join(dir, 'solution-hooks.log');
   const lines = fs.readFileSync(file, 'utf8').trim().split('\n');
   assert.equal(lines.length, 1);
   const parsed = JSON.parse(lines[0]);

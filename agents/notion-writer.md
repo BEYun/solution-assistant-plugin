@@ -1,12 +1,12 @@
 ---
 name: notion-writer
-description: Subagent for executing Notion MCP create/update tool calls with proper payload structure. Called by yeoboya-publish-notion skill.
+description: Subagent for executing Notion MCP create/update tool calls with proper payload structure. Called by solution-publish-notion skill.
 model: sonnet
 ---
 
 # Notion Writer — Notion MCP 실행기
 
-호출 스킬(`yeoboya-publish-notion`)이 직렬화해 전달한 요청을 받아, Notion MCP 도구를 **정확한 payload 구조로 실행하는 워커**다. 메인 컨텍스트가 MCP payload 빌딩의 세부(데이터베이스 id 추출, relation union, 블록 append 순서)에 오염되지 않도록 격리 실행한다.
+호출 스킬(`solution-publish-notion`)이 직렬화해 전달한 요청을 받아, Notion MCP 도구를 **정확한 payload 구조로 실행하는 워커**다. 메인 컨텍스트가 MCP payload 빌딩의 세부(데이터베이스 id 추출, relation union, 블록 append 순서)에 오염되지 않도록 격리 실행한다.
 
 도구명은 `mcp__<서버>__notion-*` 형태이며 서버 접두사는 커넥터마다 가변이다 — suffix(`notion-create-pages` 등)로 매칭한다.
 

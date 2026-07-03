@@ -205,7 +205,7 @@ WORKTYPE_LABEL = { feature: "신규 개발", update: "변경/고도화", bugfix:
 
 1. **이전 노션 문서 후보 해석** (우선순위):
    - **(1) 자기 과제 재publish** — `task.json.links[<key>]` 존재 시 그 페이지가 seed.
-   - **(2) 참고 과제(referenceTask)** — `task.json.referenceTask` 존재 시 **Notion 권위 출처로 해석**한다: `yeoboya-publish-notion mode="list-children"`(work=referenceTask)로 referenceTask row의 자식 페이지 `[{title,id}]`를 **read-only로 나열**한다(task.json 미기록 — `sync-links`와 달리 캐시에 쓰지 않는다). 나열 결과에서 `KEY_TO_TITLE[<key>]` 제목과 매칭되는 페이지의 `pageId`를 seed로 삼는다. 로컬 `.assistant/<referenceTask>/task.json.links` 캐시에 의존하지 않는다(캐시 부재·타 머신 생성 케이스 대응). 다중 페이지 키(draw-data-flow)는 두 제목("데이터 흐름도"/"통신 명세서") 모두 매칭.
+   - **(2) 참고 과제(referenceTask)** — `task.json.referenceTask` 존재 시 **Notion 권위 출처로 해석**한다: `solution-publish-notion mode="list-children"`(work=referenceTask)로 referenceTask row의 자식 페이지 `[{title,id}]`를 **read-only로 나열**한다(task.json 미기록 — `sync-links`와 달리 캐시에 쓰지 않는다). 나열 결과에서 `KEY_TO_TITLE[<key>]` 제목과 매칭되는 페이지의 `pageId`를 seed로 삼는다. 로컬 `.assistant/<referenceTask>/task.json.links` 캐시에 의존하지 않는다(캐시 부재·타 머신 생성 케이스 대응). 다중 페이지 키(draw-data-flow)는 두 제목("데이터 흐름도"/"통신 명세서") 모두 매칭.
 
 2. **분기** (B-fallback 없음 — A 아니면 B):
    - **분기 A — 후보 있음** → seed 페이지를 `notion-fetch`해 수정의 출발점으로 삼고, 상류 기획서 입력 + 사용자 요청으로 수정한 뒤 `publish-notion mode="dispatch"`로 republish한다. §변경 이력에 이번 수정 1행 추가.

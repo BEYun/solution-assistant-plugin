@@ -33,10 +33,10 @@ test('emits resume block with work + taskType + choose-subtask when task.json ex
   const result = runHook(root);
   assert.equal(result.status, 0);
   const ctx = JSON.parse(result.stdout).hookSpecificOutput.additionalContext;
-  assert.match(ctx, /<yeoboya-assistant-resume>/);
+  assert.match(ctx, /<solution-assistant-resume>/);
   assert.match(ctx, /DCL-1234/);
   assert.match(ctx, /feature/);
-  assert.match(ctx, /\/yeoboya-choose-subtask/);
+  assert.match(ctx, /\/solution-choose-subtask/);
 });
 
 test('emits create-task guidance when activeTask present but no task.json', () => {
@@ -47,5 +47,5 @@ test('emits create-task guidance when activeTask present but no task.json', () =
   const result = runHook(root);
   const ctx = JSON.parse(result.stdout).hookSpecificOutput.additionalContext;
   assert.match(ctx, /DCL-9999/);
-  assert.match(ctx, /\/yeoboya-create-task/);
+  assert.match(ctx, /\/solution-create-task/);
 });

@@ -29,7 +29,7 @@ const { logFriction } = require('./lib/friction');
     try { shape = JSON.stringify(payload.tool_response).slice(0, 400); }
     catch { shape = String(payload.tool_response).slice(0, 400); }
     log({ hook: 'page-record', event: 'miss', reason: 'no-page-id-in-response', tool: toolName, shape });
-    logFriction(root, { skill: 'yeoboya-publish-notion', category: 'tool-error', severity: 'friction', what: '노션 응답에서 pageId 추출 실패', sessionId: payload?.session_id ?? null, source: 'hook' });
+    logFriction(root, { skill: 'solution-publish-notion', category: 'tool-error', severity: 'friction', what: '노션 응답에서 pageId 추출 실패', sessionId: payload?.session_id ?? null, source: 'hook' });
     return allow();
   }
 
@@ -45,7 +45,7 @@ const { logFriction } = require('./lib/friction');
     const key = resolveKey(title);
     if (!key) {
       log({ hook: 'page-record', event: 'skip', reason: 'unknown-title', title });
-      logFriction(root, { skill: 'yeoboya-publish-notion', category: 'schema-mismatch', severity: 'nit', what: `알 수 없는 문서 제목: ${title}`, sessionId: payload?.session_id ?? null, source: 'hook' });
+      logFriction(root, { skill: 'solution-publish-notion', category: 'schema-mismatch', severity: 'nit', what: `알 수 없는 문서 제목: ${title}`, sessionId: payload?.session_id ?? null, source: 'hook' });
       continue;
     }
     const multi = isMultiPageKey(key) ? { title } : undefined;

@@ -125,7 +125,7 @@ flowchart TD
         direction TB
         f1["기획: 기획서 검토 → 정책서"] --> f2["설계: 도메인 · UI 흐름도<br/>데이터 흐름도 · QA 시나리오"]
 
-        f2 --> f3b["개발: 코드 작성 ①<br/>brainstorming — plan.md 계획 수립<br/>🟨 흐름도 3종 필요"]
+        f2 --> f3b["개발: 코드 작성 ①<br/>정책서, 설계서, Figma/Zeplin/Swagger 링크 기반 brainstorming — plan.md 계획 수립<br/>🟨 흐름도 3종 필요"]
 
         f3b --> f3w["코드 작성 ②<br/>하네스 work 위임(TDD·검증·bug-fix)<br/>→ codeWriteDone"]
 

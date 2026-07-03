@@ -107,7 +107,7 @@ flowchart TD
 
 ## 전체 흐름
 
-> 🟦 직접 호출 진입점 · 🟨 하드 게이트(선행 문서·플래그 필요) · ⬜ 세부작업
+> 🟦 직접 호출 진입점 · 🟨 하드 게이트(선행 문서·플래그 필요) · ⬜ 세부작업 · ⟲ 코드 작성(하네스 work 위임) 중단 시 `/work`로 재개
 
 ```mermaid
 flowchart TD
@@ -125,16 +125,24 @@ flowchart TD
         direction TB
         f1["기획: 기획서 검토 → 정책서"] --> f2["설계: 도메인 · UI 흐름도<br/>데이터 흐름도 · QA 시나리오"]
 
-        f2 --> f3["개발: 코드 작성 → 코드 리뷰<br/>🟨 흐름도 3종·codeWriteDone·codeReviewDone 게이트"]
+        f2 --> f3b["개발: 코드 작성 ①<br/>brainstorming — plan.md 계획 수립<br/>🟨 흐름도 3종 필요"]
 
-        f3 --> f4["QA 대응: QA 버그 수정"]
+        f3b --> f3w["코드 작성 ②<br/>하네스 work 위임(TDD·검증·bug-fix)<br/>→ codeWriteDone"]
+
+        f3w -. "중단 시 /work로 재개" .-> f3w
+
+        f3w --> f3r["개발: 코드 리뷰<br/>🟨 codeWriteDone 필요 → codeReviewDone"]
+
+        f3r --> f4["QA 대응: QA 버그 수정"]
     end
 
     subgraph BG["bugfix"]
         direction TB
-        b1["진단: 버그 분석 · QA 시나리오"] --> b2["개발: 버그 수정 → 코드 리뷰<br/>🟨 codeWriteDone·codeReviewDone 게이트"]
+        b1["진단: 버그 분석 · QA 시나리오"] --> b2["개발: 버그 수정<br/>systematic-debugging → TDD 수정<br/>→ codeWriteDone"]
 
-        b2 --> b3["QA 대응: QA 버그 수정"]
+        b2 --> b2r["개발: 코드 리뷰<br/>🟨 codeWriteDone 필요 → codeReviewDone"]
+
+        b2r --> b3["QA 대응: QA 버그 수정"]
     end
 
     f4 --> Z["④ 작업 완료<br/>Notion 작업 DB iOS/Android 완료 자동 토글"]
@@ -146,7 +154,7 @@ flowchart TD
     classDef entry fill:#2d6cdf,stroke:#1b4aa0,color:#fff;
     classDef gate fill:#fff3cd,stroke:#d39e00,color:#5c4500;
     class A,B,C,Z entry;
-    class f3,b2 gate;
+    class f3b,f3r,b2r gate;
 ```
 
 ## 세부작업 지도

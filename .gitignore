@@ -3,3 +3,4 @@ docs/
 .assistant/improvement-log.jsonl
 .assistant/.friction-session/
 .assistant/insights.html
+.assistant/.insights-narrative.html
